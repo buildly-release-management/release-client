@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Header } from './Header';
 import './page.css';
+import ReleaseManager  from "./ReleaseManager";
 
 type User = {
   name: string;
