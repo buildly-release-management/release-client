@@ -11,6 +11,8 @@ export default {
   },
 };
 
+export const ReleaseManager = {};
+
 export const LoggedOut = {};
 
 // More on interaction testing: https://storybook.js.org/docs/react/writing-tests/interaction-testing
