@@ -12,15 +12,15 @@ const SampleNavbar = (props: any) => {
         <>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                    <Navbar.Brand href="#home">Buildly Insights</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="#features">Features</Nav.Link>
+                            <Nav.Link href="#releases">Releases</Nav.Link>
                             <Nav.Link href="#pricing">Pricing</Nav.Link>
                             <NavDropdown title="Products" id="collasible-nav-dropdown">
                                 <NavDropdown.Item href="#action/3.4">
-                                    Selected product
+                                    Active product
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider/>
                                 { products.length && products.map(
@@ -37,7 +37,7 @@ const SampleNavbar = (props: any) => {
                         <Nav>
                             <Nav.Link href="#deets">More deets</Nav.Link>
                             <Nav.Link eventKey={2} href="#memes">
-                                Dank memes
+                                Logged in User
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
