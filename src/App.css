@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Inter, OpenSans, Raleway, "PT Sans", sans-serif;
+  color: #2b2b2b;
+}
+
 .App {
   text-align: center;
 }

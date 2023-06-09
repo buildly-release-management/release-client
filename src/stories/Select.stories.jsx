@@ -26,8 +26,8 @@ Large.args = {
     size: 'large',
     label: 'Select an Option',
     options: [
-        { value: 'a', description: 'Option A' },
-        { value: 'b', description: 'Option B' },
-        { value: 'c', description: 'Option C' },
+        { value: 'a', label: 'Option A' },
+        { value: 'b', label: 'Option B' },
+        { value: 'c', label: 'Option C' },
     ]
 };

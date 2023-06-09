@@ -1,0 +1,17 @@
+// Color Palette
+$white: #fff;
+$black: #000;
+
+$orange: #f9943b;
+$blue: #0c5595;
+$red: #c81b1b;
+
+// Gray Scale
+$gray-dark: #222;
+$gray: #757575;
+
+$theme-colors {
+  'primary':$orange ;
+  'secondary':$blue ;
+  'danger':$red ;
+}
