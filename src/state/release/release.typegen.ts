@@ -30,7 +30,7 @@
         eventsCausingServices: {
           "loadReleases": "xstate.init";
         };
-        matchesStates: "Create Release" | "Create Release.Show Release Form" | "Loading Failed" | "Loading Releases" | "Releases Loaded" | { "Create Release"?: "Show Release Form"; };
+        matchesStates: "Loading Failed" | "Loading Releases" | "Releases Loaded";
         tags: never;
       }
   
