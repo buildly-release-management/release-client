@@ -3,6 +3,8 @@ import "./Select.css";
 import PropTypes from "prop-types";
 
 const Select = ({ size, label, options, info, onChange }) => {
+  console.log("options : ", options);
+
   return (
     <label className={`select-component select-component--${size}`}>
       <span className="label">{label}</span>
