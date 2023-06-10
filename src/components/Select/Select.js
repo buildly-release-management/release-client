@@ -10,8 +10,10 @@ const Select = ({ size, label, options, info, onChange }) => {
       <span className="label">{label}</span>
       <select className="form-select" onChange={onChange}>
         <option defaultValue>Choose</option>
-        {options.map((option) => (
-          <option value={option.value}>{option.label}</option>
+        {options.map((option, index) => (
+          <option key={index} value={option.value}>
+            {option.label}
+          </option>
         ))}
       </select>
       <span className="info">{info}</span>
