@@ -4,11 +4,10 @@ import { ReleaseService } from "../../../services/release.service";
 import Table from "react-bootstrap/Table";
 import { Release } from "../../../interfaces/release";
 import React from "react";
-import Select from "../../../components/Select";
-import Button from "react-bootstrap/Button";
-import "./../../../assets/css/button.css";
 import { ProductService } from "../../../services/product.service";
 import { productMachine } from "../../../state/product/product";
+import Select from "../../../components/Select";
+import CustomButton from "../../../components/Button";
 
 const orgUuid = "baa50960-1a98-4ced-bb16-b60662ddea55";
 const releaseService = new ReleaseService();
@@ -56,7 +55,8 @@ function ReleaseList() {
             />
           </section>
 
-          <Button variant="outline-secondary">New release</Button>
+          <CustomButton label="New release" variant="outline-secondary" />
+          {/*<Button variant="outline-secondary">New release</Button>*/}
         </div>
         <div className="row">
           <h2>Releases</h2>

@@ -7,9 +7,22 @@ import "./Navbar.css";
 const MainNavbar = (props: any) => {
   return (
     <>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Navbar
+        collapseOnSelect
+        expand="lg"
+        variant="dark"
+        className="custom-navbar"
+      >
         <Container>
-          <Navbar.Brand href="#home">Buildly Insights</Navbar.Brand>
+          <Navbar.Brand href="#home">
+            <img
+              src="./../../assets/img/logo.png"
+              width="596"
+              className="d-inline-block align-top"
+              alt="Buildly insights"
+            />
+          </Navbar.Brand>
+          {/*<Navbar.Brand href="#home">Buildly Insights</Navbar.Brand>*/}
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
