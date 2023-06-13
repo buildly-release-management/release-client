@@ -71,9 +71,9 @@ function ReleaseList() {
         </div>
         {/*handleShow*/}
 
-        <div className="row">
-          <h2>Releases</h2>
-        </div>
+        {/*<div className="row">*/}
+        {/*  <h2>Releases</h2>*/}
+        {/*</div>*/}
         <Table striped bordered hover>
           <thead>
             <tr>
