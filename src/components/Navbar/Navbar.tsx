@@ -14,15 +14,17 @@ const MainNavbar = (props: any) => {
         className="custom-navbar"
       >
         <Container>
-          <Navbar.Brand href="#home">
-            <img
-              src="./../../assets/img/logo.png"
-              width="596"
-              className="d-inline-block align-top"
-              alt="Buildly insights"
-            />
-          </Navbar.Brand>
-          {/*<Navbar.Brand href="#home">Buildly Insights</Navbar.Brand>*/}
+          <a className="navbar-brand" href="#home">
+            {/*<img src="/src/assets/img/logo.png" />*/}
+          </a>
+          {/*<Navbar.Brand href="#home">*/}
+          {/*  <img*/}
+          {/*    src="./../../assets/img/logo.png"*/}
+          {/*    width="180"*/}
+          {/*    className="d-inline-block align-top"*/}
+          {/*    alt="Buildly insights"*/}
+          {/*  />*/}
+          {/*</Navbar.Brand>*/}
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">

@@ -3,11 +3,12 @@ import { releaseMachine } from "../../../state/release/release";
 import { ReleaseService } from "../../../services/release.service";
 import Table from "react-bootstrap/Table";
 import { Release } from "../../../interfaces/release";
-import React from "react";
+import React, { useState } from "react";
 import { ProductService } from "../../../services/product.service";
 import { productMachine } from "../../../state/product/product";
 import Select from "../../../components/Select";
 import CustomButton from "../../../components/Button";
+import CustomModal from "../../../components/Modal/Modal";
 
 const orgUuid = "baa50960-1a98-4ced-bb16-b60662ddea55";
 const releaseService = new ReleaseService();
@@ -42,6 +43,11 @@ function ReleaseList() {
     },
   });
 
+  // Add/Edit release modal
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   return (
     <>
       <div className="container">
@@ -55,9 +61,16 @@ function ReleaseList() {
             />
           </section>
 
-          <CustomButton label="New release" variant="outline-secondary" />
-          {/*<Button variant="outline-secondary">New release</Button>*/}
+          <CustomButton
+            label="New release"
+            variant="outline-secondary"
+            btnClicked={() => {
+              console.log("clicked");
+            }}
+          />
         </div>
+        {/*handleShow*/}
+
         <div className="row">
           <h2>Releases</h2>
         </div>
@@ -80,6 +93,9 @@ function ReleaseList() {
               ))}
           </tbody>
         </Table>
+
+        {/*Add/Edit release modal*/}
+        <CustomModal show={show} />
       </div>
     </>
   );

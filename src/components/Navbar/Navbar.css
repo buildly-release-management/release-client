@@ -1,3 +1,9 @@
 .custom-navbar {
   background-color: #0c5595 !important;
 }
+
+.navbar-brand {
+  background: url("/src/assets/img/logo.png") center / contain no-repeat;
+  width: 10rem;
+  height: 2.5rem;
+}

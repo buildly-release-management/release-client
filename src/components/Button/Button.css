@@ -22,12 +22,13 @@
 }
 
 .btn-outline-secondary {
-  --bs-btn-color: var(--orange);
-  --bs-btn-border-color: var(--orange);
-  --bs-btn-hover-bg: var(--orange);
-  --bs-btn-hover-border-color: var(--orange);
-  --bs-btn-active-bg: var(--orange);
-  --bs-btn-active-border-color: var(--orange);
-  --bs-btn-disabled-color: var(--orange);
-  --bs-btn-disabled-border-color: var(--orange);
+  --bs-btn-color: var(--orange) !important;
+  --bs-btn-border-color: var(--orange) !important;
+  --bs-btn-hover-bg: var(--orange) !important;
+  --bs-btn-hover-border-color: var(--orange) !important;
+  --bs-btn-active-color: var(--orange) !important;
+  --bs-btn-active-bg: var(--orange) !important;
+  --bs-btn-active-border-color: var(--orange) !important;
+  --bs-btn-disabled-color: var(--orange) !important;
+  --bs-btn-disabled-border-color: var(--orange) !important;
 }
