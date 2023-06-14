@@ -31,7 +31,7 @@ function ReleaseList() {
                     </tr>
                     </thead>
                     <tbody>
-                    {state.matches('Releases Loaded') && state.context.releases.map((release: Release) => (
+                    {state.matches('Entry.Loaded') && state.context.releases.map((release: Release) => (
                         <tr key={release.release_uuid}>
                             <td>{release.name}</td>
                             <td>{release.release_date}</td>
