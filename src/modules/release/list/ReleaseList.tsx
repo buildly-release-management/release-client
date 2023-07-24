@@ -99,7 +99,7 @@ function ReleaseList() {
         </Table>
 
         {/*Add/Edit release modal*/}
-        <CustomModal show={show} />
+        <CustomModal show={show} products={productState.context.products} />
       </div>
     </>
   );
