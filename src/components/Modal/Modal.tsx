@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Select from "../Select";
+import { ReleaseService } from "../../services/release.service";
+import { Release } from "../../interfaces/release";
+
+const releaseService = new ReleaseService();
 
 interface ModalProps {
   show: boolean;
@@ -11,25 +15,22 @@ interface ModalProps {
 }
 
 const CustomModal = (props: ModalProps) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({} as Release);
   const updateFormData = (e: any) => {
-    console.log("e : ", e);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    console.log("formData : ", formData);
   };
 
   const submitRelease = (e: any) => {
     e.preventDefault();
-    console.log(formData);
+    console.log("formData : ", formData);
+    releaseService.submitRelease(formData);
   };
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-
-  // const [products, setProducts] = useState([]);
 
   return (
     <div
@@ -49,20 +50,7 @@ const CustomModal = (props: ModalProps) => {
         </Modal.Header>
         <Modal.Body>
           {" "}
-          {/*<form onSubmit={submitRelease}>*/}
-          {/*  <input*/}
-          {/*      name="email"*/}
-          {/*      type="email"*/}
-          {/*      onChange={updateData}*/}
-          {/*  />*/}
-          {/*  <input*/}
-          {/*      name="password"*/}
-          {/*      type="password"*/}
-          {/*      onChange={updateData}*/}
-          {/*  />*/}
-          {/*  <button>Submit</button>*/}
-          {/*</form>*/}
-          <Form onSubmit={submitRelease}>
+          <Form>
             {/*name*/}
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Name</Form.Label>
@@ -95,17 +83,6 @@ const CustomModal = (props: ModalProps) => {
                 onChange={(event) => updateFormData(event)}
               />
             </Form.Group>
-            {/*env*/}
-            <Form.Group className="mb-3" controlId="environment">
-              <Form.Label>Environment</Form.Label>
-              <Form.Control
-                size="sm"
-                type="text"
-                placeholder="Environment"
-                name="environment"
-                onChange={(event) => updateFormData(event)}
-              />
-            </Form.Group>
             {/*product*/}
             <Form.Group className="mb-3" controlId="product">
               <Select
@@ -121,36 +98,16 @@ const CustomModal = (props: ModalProps) => {
           <Button variant="outline-secondary" size="sm" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" size="sm" type="submit">
+          <Button
+            variant="primary"
+            size="sm"
+            type="submit"
+            onClick={(event) => submitRelease(event)}
+          >
             Save
           </Button>
         </Modal.Footer>
       </Modal>
-      {/*<Modal show={props.show} onHide={handleClose}>*/}
-      {/*  <Modal.Header closeButton>*/}
-      {/*    <Modal.Title>Modal heading</Modal.Title>*/}
-      {/*  </Modal.Header>*/}
-      {/*  <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>*/}
-      {/*  <Modal.Footer>*/}
-      {/*    /!*    /!*<CustomButton variant="secondary" label="Close" btnClicked={} />*!/*!/*/}
-      {/*    /!*    /!*<CustomButton variant="primary" label="Save changes" btnClicked={} />*!/*!/*/}
-      {/*  </Modal.Footer>*/}
-      {/*</Modal>*/}
-
-      {/*<Modal.Dialog>*/}
-      {/*  <Modal.Header closeButton>*/}
-      {/*    <Modal.Title>Modal title</Modal.Title>*/}
-      {/*  </Modal.Header>*/}
-
-      {/*  <Modal.Body>*/}
-      {/*    <p>Modal body text goes here.</p>*/}
-      {/*  </Modal.Body>*/}
-
-      {/*  <Modal.Footer>*/}
-      {/*    /!*<CustomButton variant="secondary" label="Close" btnClicked={} />*!/*/}
-      {/*    /!*<CustomButton variant="primary" label="Save changes" btnClicked={} />*!/*/}
-      {/*  </Modal.Footer>*/}
-      {/*</Modal.Dialog>*/}
     </div>
   );
 };
