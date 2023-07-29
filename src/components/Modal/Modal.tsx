@@ -16,6 +16,10 @@ interface ModalProps {
 
 const CustomModal = (props: ModalProps) => {
   const [formData, setFormData] = useState({} as Release);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+
+  // Update formData on form value change
   const updateFormData = (e: any) => {
     setFormData({
       ...formData,
@@ -23,14 +27,15 @@ const CustomModal = (props: ModalProps) => {
     });
   };
 
-  const submitRelease = (e: any) => {
-    e.preventDefault();
+  const submitRelease = (event: any) => {
+    event.preventDefault();
     console.log("formData : ", formData);
-    releaseService.submitRelease(formData);
+    releaseService.submitRelease(formData).then();
   };
 
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const closeModal = {
+    // props.show = false
+  };
 
   return (
     <div
@@ -50,7 +55,7 @@ const CustomModal = (props: ModalProps) => {
         </Modal.Header>
         <Modal.Body>
           {" "}
-          <Form>
+          <Form noValidate>
             {/*name*/}
             <Form.Group className="mb-3" controlId="name">
               <Form.Label>Name</Form.Label>
@@ -59,6 +64,7 @@ const CustomModal = (props: ModalProps) => {
                 type="text"
                 placeholder="Name"
                 name="name"
+                required
                 onChange={(event) => updateFormData(event)}
               />
             </Form.Group>
@@ -80,6 +86,7 @@ const CustomModal = (props: ModalProps) => {
                 type="date"
                 placeholder="Release date"
                 name="release_date"
+                required
                 onChange={(event) => updateFormData(event)}
               />
             </Form.Group>
@@ -89,19 +96,23 @@ const CustomModal = (props: ModalProps) => {
                 name="product_uuid"
                 label="Select a product"
                 options={props.products}
+                required={true}
                 onChange={(event) => updateFormData(event)}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-secondary" size="sm" onClick={handleClose}>
+          <Button variant="outline-secondary" size="sm">
             Close
           </Button>
           <Button
             variant="primary"
             size="sm"
             type="submit"
+            disabled={
+              !(formData.name && formData.release_date && formData.product_uuid)
+            }
             onClick={(event) => submitRelease(event)}
           >
             Save
