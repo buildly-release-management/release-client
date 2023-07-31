@@ -3,7 +3,7 @@ import { Release } from '../../interfaces/release';
 
 export const releaseMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QCcwBswENZwHQFEA7AF2QE9cAZAe0wgEtCoBiCawsXRgN2oGtOqDNjxFSFGnUZQEPagGNMxeuwDaABgC6GzYlAAHarHrL2ekAA9EAWgDsAJgCsudQA5HATgDMtxwBoQMhsAFkd1XGD1ADYnAF9YgKEsHFgCEnIqWgYmZjBkZGpkXH00JQAzQoBbXCSRVLEMyWyZOUVTQh0dc0NjdvMrBGtg21tcD1dXe1cARicAoMHHWw9cSfUvWcd4xPRk0XSJLMhmC1hiJU5MMuI8gAow9QBKZlqUtPFMukgupBAekxUhH6NiiriiuEcXg80TmgRs9mC4Ki6kciNcvnUmMxUW2IFe+w+ADEqgARJSYZgAZQArgAjSomH4GIwAsy-AbWLzqUbjVG2LxRLxTTbzeFRYKrZZQ0IbOIJPG7OrvDLE5CVMnnKl0hnEVTTXS-f59dli5yOGL+OGDSKjLyOexuWbjSYzeLywjUCBwcz4+CGlnG0AcybTFzuby+UWDXzg1zBHxbeW+3A0+kmZRMboBwHAwYeZwO9ROQXDKLm2ELayOc1jWYxGb8l3TXHJ1M6jNQXAAYVQSmkWd6OZNCFc4VRwXG9g803U03LlsrUNG02mHlBHg8wWmkQtLcVbzb6ekuAAqvoIH3M-7B2yg4hbK4Ip51KEt7P51HOTPcFO515gsE9heE2e7CAe2pHkwuAcAA7gABGcFxwdMA6skCw5DKMhbFv+thlhan6IisW72PW0yNsKoF7PUByoYGlg2CMXhhp4CaflEUQrP+CZUUqDSHFIV7Mje6F3tGs6rD46xRNMQozBWNiODMqzxr4vFvPxnxehAdFDmJ1hRL4LhQjCC42BsobROKpnqQSjRZISmD0BgOnXmhuZDDJYzrABQFNgp1oOGMPFJvudkUKq6rkrpt4MYMoLMVM0IEVa1hzo+-6AcBwpyjsYGiPkhSQDFolxau4J4XG3hlkBqlmYMK6Pui6UOrKiZ5dRKbUvIYBwH6wnuRh9q4F4AoeBi434QFdiPgB43cusmxurEQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QCcwBswENZwHQFEA7AF2QE9cAZAe0wgEtCoBiCawsXRgN2oGtOqDNjxFSFGnUZQEPagGNMxeuwDaABgC6GzYlAAHarHrL2ekAA9EAWgDsAJgCsudQA5HATgDMtxwBoQMhsAFkd1XGD1ADYnAF9YgKEsHFgCEnIqWgYmZjBkZGpkXH00JQAzQoBbXCSRVLEMyWyZOUVTQh0dc0NjdvMrBGtg21tcD1dXe1cARicAoMHHWw9cSfUvWcd4xPRk0XSJLMhmC1hiJU5MMuI8gAow9QBKZlqUtPFMukgupBAekxUhH6NiiriiuEcXg80TmgRs9mC4Ki6kciNcvnUmMxUW2IFe+w+ADEqgARJSYZgAZQArgAjSomH4GIwAsy-AbWKajDz2KIeWw+exeKLLabzGxhXBedTTaZLOX2FEI4K4-H1A64YnISpk85UukM4iqaa6X7-Prs+FTVYTWzTFFhXm2aLiwbTUEuKKOGZykYeDyg1W7Oq4Gn0kzKHKwanyeRwWBMv4si2gAa85xhL3BIX2WXRAOuzn+3BRe1hRze4JeLy8oPCN5hw2Rlh5Ar5b5abrJwHAhD21y4BG2KLBOX+mZuKKF6Y1qXBbOKjzTVxQis43GEagQODmNVd3o9y2DSbTFzuby+Qu+cGuKu+abjdT2AVeOt7dXifesoFHuwCs+eD4-hwoMUR8nOQHqP6MrCuuOz1gSjRZNIX4ppYNjOqeK7OsKM5TJshbelhd5bAkeLBm8DSHF8ECoYeqYgr4LhQjCwELNYGyntEI6sW+IZUZ8ECEpg9AYLRZrdmyDGDIi4Rge6NZeI4TgeEsbEhMKg63sEAZET6Xp8ZRGpajq5J0VJ6GgSuWnQjE6lut6c7Zl4kwzHEZFqqGBomMJomQOZP7ST4cmjuWkQeME6LDtOTgRDyLHKuMwyuIZeCNhG-kSQeFkDKOoxTBFXg6aWz62Cuhb2MWpbqJFmKQnyEypak6XEM2AW9isRFFY4yKTNKsxeIWyLBBErg1a4S5REpNbTE1Xnhq10i4AAwqgSgoVl369p4JYitKKJyhNymuIR7pjGNkUzC+qmkfB77zU2S0AKr6BA61MO1R5LBCMzdb1QoyvYhajiskS2Nm9q8pV2nxPEQA */
     tsTypes: {} as import('./release.typegen').Typegen0,
 
     schema: {
@@ -21,32 +21,6 @@ export const releaseMachine = createMachine(
     id: 'releases',
 
     states: {
-      Submitting: {
-        states: {
-          Creating: {
-            invoke: {
-                src: 'submitRelease',
-                onDone: [
-                    {
-                        target: 'Success',
-                        actions: 'updateReleaseCxt'
-                    }
-                ],
-                onError: [
-                    {
-                        target: 'Errored',
-                        actions: 'AddErrorToCxt'
-                    }
-                ]
-            },
-          },
-          Updating: {},
-          "new state 1": {}
-        },
-
-        initial: "new state 1"
-      },
-
       Entry: {
         states: {
           Loading: {
@@ -73,7 +47,9 @@ export const releaseMachine = createMachine(
               "500": "FormData"
             }
           },
+
           LoadFailed: {},
+
           FormData: {
             on: {
               Submit: [{
@@ -87,8 +63,30 @@ export const releaseMachine = createMachine(
         initial: "Loading"
       },
 
-      Errored: {},
-      Suceess: {}
+      SubmitFailed: {},
+      Submitted: {},
+
+      Submitting: {
+        states: {
+          Creating: {
+            invoke: {
+              src: 'submitRelease'
+            },
+          },
+          Updating: {
+            invoke: {
+              src: 'submitRelease',
+              onDone: {actions: 'addSingleReleaseToCxt', target: '#releases.Submitted'},
+              onError: {actions:'addErrorToCxt', target: '#releases.SubmitFailed'}
+            },
+          }
+        },
+
+        on: {
+          success: "Submitted",
+          errorred: "SubmitFailed"
+        }
+      }
     },
 
     initial: "Entry"
@@ -101,6 +99,9 @@ export const releaseMachine = createMachine(
       addErrorToCxt: assign((context, event) => {
         return { error: (event.data as Error).message };
       }),
+      addSingleReleaseToCxt: assign((context, event) => {
+        return {...context.releases, ...event.data}
+      })
     },
   }
 );
