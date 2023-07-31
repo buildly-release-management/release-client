@@ -9,6 +9,7 @@ import { productMachine } from "../../../state/product/product";
 import Select from "../../../components/Select";
 import CustomModal from "../../../components/Modal/Modal";
 import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
 const orgUuid = "baa50960-1a98-4ced-bb16-b60662ddea55";
 const releaseService = new ReleaseService();
@@ -90,7 +91,13 @@ function ReleaseList() {
             {state.matches("Releases Loaded") &&
               state.context.releases.map((release: Release) => (
                 <tr key={release.release_uuid}>
-                  <td>{release.name}</td>
+                  <td>
+                    <Link
+                      to={{ pathname: `/products/${release.release_uuid}` }}
+                    >
+                      {release.name}
+                    </Link>{" "}
+                  </td>
                   <td>{release.release_date}</td>
                   <td>{release.features_count}</td>
                 </tr>
