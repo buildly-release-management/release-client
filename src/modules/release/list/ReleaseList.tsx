@@ -93,7 +93,7 @@ function ReleaseList() {
                 <tr key={release.release_uuid}>
                   <td>
                     <Link
-                      to={{ pathname: `/products/${release.release_uuid}` }}
+                      to={{ pathname: `/releases/${release.release_uuid}` }}
                     >
                       {release.name}
                     </Link>{" "}
