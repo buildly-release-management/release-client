@@ -5,21 +5,17 @@ import { Doughnut } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const DoughnutChart = ({ chartData }: any) => {
-  return <Doughnut data={chartData} />;
+const DoughnutChart = ({ id, labels, label, data }: any) => {
+  const backgroundColor = ["#0D5595", "#F8943C", "#C91B1A"];
+  const chartData = { labels, datasets: [{ label, data, backgroundColor }] };
+  return <Doughnut id={id} data={chartData} />;
 };
 
 DoughnutChart.propTypes = {
-  chartData: PropTypes.shape({
-    labels: PropTypes.array.isRequired,
-    datasets: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        data: PropTypes.array.isRequired,
-        backgroundColor: PropTypes.array.isRequired,
-      })
-    ),
-  }).isRequired,
+  id: PropTypes.string.isRequired,
+  labels: PropTypes.array.isRequired,
+  label: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default DoughnutChart;
