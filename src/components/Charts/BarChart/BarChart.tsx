@@ -1,29 +1,68 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // style={{ maxHeight: "600px" }}
-const BarChart = ({ id, chartData }: any) => {
-  return <Bar id={id} data={chartData} />;
+
+const BarChart = ({
+  id,
+  labels,
+  label,
+  data,
+  backgroundColor,
+  borderWidth,
+  borderColor,
+}: any) => {
+  const options = {
+    plugins: {
+      title: {
+        display: true,
+        text: label,
+      },
+    },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  };
+
+  const chartData = {
+    labels,
+    datasets: data,
+  };
+  return <Bar id={id} options={options} data={chartData} />;
 };
 
 BarChart.propTypes = {
   id: PropTypes.string.isRequired,
-  chartData: PropTypes.shape({
-    labels: PropTypes.array.isRequired,
-    datasets: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        data: PropTypes.array.isRequired,
-        backgroundColor: PropTypes.string,
-        borderWidth: PropTypes.array,
-        borderColor: PropTypes.string,
-      })
-    ),
-  }).isRequired,
+  labels: PropTypes.array.isRequired,
+  label: PropTypes.string,
+  data: PropTypes.array.isRequired,
+  backgroundColor: PropTypes.string,
+  borderWidth: PropTypes.number,
+  borderColor: PropTypes.string,
 };
 
 export default BarChart;

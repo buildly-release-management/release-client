@@ -2,10 +2,6 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Bar } from "react-chartjs-2";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ReleaseDetails() {
   const { releaseUuid } = useParams();
@@ -13,40 +9,30 @@ function ReleaseDetails() {
 
   // Sample data
   const pieChartLabels = ["Done", "In progress", "Overdue"];
-  const pieChartLabel = "Release summary";
+  const pieChartLabel = "Releases summary";
   const pieChartData = [7, 5, 3];
 
-  const data = {
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    datasets: [
-      {
-        label: "Hours Studied in Geeksforgeeks",
-        data: [2, 5, 6, 7, 3],
-        backgroundColor: ["blue", "green", "yellow", "pink", "orange"],
-      },
-    ],
-  };
-
-  const barChartData = {
-    labels: [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ],
-    datasets: [
-      {
-        label: "Hours Studied in Geeksforgeeks",
-        data: [2, 5, 6, 7, 3, 3, 4],
-        backgroundColor: "#02b844",
-        borderWidth: 1,
-        borderColor: "#000000",
-      },
-    ],
-  };
+  const barChartLabels = ["bike", "car", "scooter", "truck", "auto", "Bus"];
+  const barChartData = [
+    {
+      label: "Done",
+      backgroundColor: "#0D5595",
+      data: [17, 16, 4, 11, 8, 9],
+    },
+    {
+      label: "In progress",
+      backgroundColor: "#F8943C",
+      data: [14, 2, 10, 6, 12, 16],
+    },
+    {
+      label: "Overdue",
+      backgroundColor: "#C91B1A",
+      data: [2, 21, 13, 3, 24, 7],
+    },
+  ];
+  const backgroundColor = "#02b844";
+  const borderWidth = 1;
+  const borderColor = "#000000";
 
   return (
     <>
@@ -59,12 +45,28 @@ function ReleaseDetails() {
             data={pieChartData}
           />
         </section>
-        {/*<section className="col-4">*/}
-        {/*  <BarChart id="features" chartData={barChartData} />*/}
-        {/*</section>*/}
-        {/*<section className="col-4">*/}
-        {/*  <DoughnutChart id="isssues" chartData={data} />*/}
-        {/*</section>*/}
+        <section className="col-4">
+          <BarChart
+            id="features"
+            label="Features summary"
+            labels={barChartLabels}
+            data={barChartData}
+            backgroundColor={backgroundColor}
+            borderWidth={borderWidth}
+            borderColor={borderColor}
+          />
+        </section>
+        <section className="col-4">
+          <BarChart
+            id="issues"
+            label="Issues summary"
+            labels={barChartLabels}
+            data={barChartData}
+            backgroundColor={backgroundColor}
+            borderWidth={borderWidth}
+            borderColor={borderColor}
+          />
+        </section>
       </div>
     </>
   );
