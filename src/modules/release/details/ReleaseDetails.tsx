@@ -1,10 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-// import { Doughnut } from "react-chartjs-2";
 import DoughnutChart from "../../../components/Charts/Doughnut";
-
-// ChartJS.register(ArcElement, Tooltip, Legend);
 
 function ReleaseDetails() {
   const { releaseUuid } = useParams();
@@ -24,8 +20,16 @@ function ReleaseDetails() {
 
   return (
     <>
-      <div className="container">
-        <DoughnutChart chartData={data} />
+      <div className="row col-12">
+        <section className="col-4">
+          <DoughnutChart chartData={data} />
+        </section>
+        <section className="col-4">
+          <DoughnutChart chartData={data} />
+        </section>
+        <section className="col-4">
+          <DoughnutChart chartData={data} />
+        </section>
       </div>
     </>
   );
