@@ -7,8 +7,9 @@ import React, { useState } from "react";
 import { ProductService } from "../../../services/product.service";
 import { productMachine } from "../../../state/product/product";
 import Select from "../../../components/Select";
-import CustomButton from "../../../components/Button";
 import CustomModal from "../../../components/Modal/Modal";
+import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
 const orgUuid = "baa50960-1a98-4ced-bb16-b60662ddea55";
 const releaseService = new ReleaseService();
@@ -61,13 +62,17 @@ function ReleaseList() {
             />
           </section>
 
-          <CustomButton
-            label="New release"
-            variant="outline-secondary"
-            btnClicked={() => {
-              console.log("clicked");
-            }}
-          />
+          <Button variant="outline-secondary" onClick={handleShow}>
+            New release
+          </Button>
+
+          {/*<CustomButton*/}
+          {/*  label="New release"*/}
+          {/*  variant="outline-secondary"*/}
+          {/*  btnClicked={() => {*/}
+          {/*    console.log("clicked");*/}
+          {/*  }}*/}
+          {/*/>*/}
         </div>
         {/*handleShow*/}
 
@@ -86,7 +91,13 @@ function ReleaseList() {
             {state.matches("Releases Loaded") &&
               state.context.releases.map((release: Release) => (
                 <tr key={release.release_uuid}>
-                  <td>{release.name}</td>
+                  <td>
+                    <Link
+                      to={{ pathname: `/releases/${release.release_uuid}` }}
+                    >
+                      {release.name}
+                    </Link>{" "}
+                  </td>
                   <td>{release.release_date}</td>
                   <td>{release.features_count}</td>
                 </tr>
@@ -95,7 +106,7 @@ function ReleaseList() {
         </Table>
 
         {/*Add/Edit release modal*/}
-        <CustomModal show={show} />
+        <CustomModal show={show} products={productState.context.products} />
       </div>
     </>
   );
