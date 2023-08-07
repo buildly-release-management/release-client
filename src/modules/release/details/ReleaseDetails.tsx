@@ -2,10 +2,10 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
+import { Card } from "react-bootstrap";
 
 function ReleaseDetails() {
   const { releaseUuid } = useParams();
-  console.log("releaseUuid : ", releaseUuid);
 
   // Sample data
   const pieChartLabels = ["Done", "In progress", "Overdue"];
@@ -36,37 +36,44 @@ function ReleaseDetails() {
 
   return (
     <>
-      <div className="row col-12">
-        <section className="col-4">
-          <DoughnutChart
-            id="releases"
-            labels={pieChartLabels}
-            label={pieChartLabel}
-            data={pieChartData}
-          />
-        </section>
-        <section className="col-4">
-          <BarChart
-            id="features"
-            label="Features summary"
-            labels={barChartLabels}
-            data={barChartData}
-            backgroundColor={backgroundColor}
-            borderWidth={borderWidth}
-            borderColor={borderColor}
-          />
-        </section>
-        <section className="col-4">
-          <BarChart
-            id="issues"
-            label="Issues summary"
-            labels={barChartLabels}
-            data={barChartData}
-            backgroundColor={backgroundColor}
-            borderWidth={borderWidth}
-            borderColor={borderColor}
-          />
-        </section>
+      <div className="container">
+        <Card>
+          <Card.Body>
+            <Card.Title>{releaseUuid}</Card.Title>
+            <div className="row col-12 d-flex flex-wrap">
+              <section className="col-md-4 col-sm-12">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </section>
+              <section className="col-md-4 col-sm-12">
+                <BarChart
+                  id="features"
+                  label="Features summary"
+                  labels={barChartLabels}
+                  data={barChartData}
+                  backgroundColor={backgroundColor}
+                  borderWidth={borderWidth}
+                  borderColor={borderColor}
+                />
+              </section>
+              <section className="col-md-4 col-sm-12">
+                <BarChart
+                  id="issues"
+                  label="Issues summary"
+                  labels={barChartLabels}
+                  data={barChartData}
+                  backgroundColor={backgroundColor}
+                  borderWidth={borderWidth}
+                  borderColor={borderColor}
+                />
+              </section>
+            </div>
+          </Card.Body>
+        </Card>
       </div>
     </>
   );
