@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
-import { Card } from "react-bootstrap";
+import "./ReleaseDetails.css";
 
 function ReleaseDetails() {
   const { releaseUuid } = useParams();
@@ -37,43 +37,50 @@ function ReleaseDetails() {
   return (
     <>
       <div className="container">
-        <Card>
-          <Card.Body>
-            <Card.Title>{releaseUuid}</Card.Title>
-            <div className="row col-12 d-flex flex-wrap">
-              <section className="col-md-4 col-sm-12">
-                <DoughnutChart
-                  id="releases"
-                  labels={pieChartLabels}
-                  label={pieChartLabel}
-                  data={pieChartData}
-                />
-              </section>
-              <section className="col-md-4 col-sm-12">
-                <BarChart
-                  id="features"
-                  label="Features summary"
-                  labels={barChartLabels}
-                  data={barChartData}
-                  backgroundColor={backgroundColor}
-                  borderWidth={borderWidth}
-                  borderColor={borderColor}
-                />
-              </section>
-              <section className="col-md-4 col-sm-12">
-                <BarChart
-                  id="issues"
-                  label="Issues summary"
-                  labels={barChartLabels}
-                  data={barChartData}
-                  backgroundColor={backgroundColor}
-                  borderWidth={borderWidth}
-                  borderColor={borderColor}
-                />
-              </section>
+        <section className="toolbar">
+          {" "}
+          <h6>{releaseUuid}</h6>
+        </section>
+        {/*<Card>*/}
+        {/*  <Card.Body>*/}
+        {/*    <h6>{releaseUuid}</h6>*/}
+        {/*  </Card.Body>*/}
+        {/*</Card>*/}
+
+        <div className="container-fluid my-2">
+          <div className="row">
+            <div className="col chart-container">
+              <DoughnutChart
+                id="releases"
+                labels={pieChartLabels}
+                label={pieChartLabel}
+                data={pieChartData}
+              />
             </div>
-          </Card.Body>
-        </Card>
+            <div className="col chart-container">
+              <BarChart
+                id="features"
+                label="Features summary"
+                labels={barChartLabels}
+                data={barChartData}
+                backgroundColor={backgroundColor}
+                borderWidth={borderWidth}
+                borderColor={borderColor}
+              />
+            </div>
+            <div className="col chart-container">
+              <BarChart
+                id="issues"
+                label="Issues summary"
+                labels={barChartLabels}
+                data={barChartData}
+                backgroundColor={backgroundColor}
+                borderWidth={borderWidth}
+                borderColor={borderColor}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
