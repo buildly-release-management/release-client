@@ -1,17 +1,29 @@
-import React from "react";
-import Select from "../Select";
+import React, { useState } from "react";
 import { useMachine } from "@xstate/react";
 import { productMachine } from "../../state/product/product";
 import { ProductService } from "../../services/product.service";
+import Select from "../Select";
+import Button from "react-bootstrap/Button";
+import CustomModal from "../Modal/Modal";
+import "./ProjectSelect.css";
 
 const productService = new ProductService();
 
 const ProjectSelect = ({ orgUuid }: any) => {
+  // Add/Edit release modal
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  let selectedProduct = null;
+
   const [productState] = useMachine(productMachine, {
     services: {
       loadProducts: async (): Promise<any> =>
         productService.getProducts(orgUuid).then((products) => {
           if (products?.length) {
+            selectedProduct = products[0];
+
             return products.map((product: any) => {
               return {
                 label: product.name,
@@ -30,20 +42,24 @@ const ProjectSelect = ({ orgUuid }: any) => {
 
   return (
     <>
-      <div className="flex-container d-flex flex-row justify-content-between align-items-center">
+      <div className="product-select-container">
         <section className="col-6">
           <Select
             label="Select a product"
             size="large"
-            info="last updated"
+            value="b075ca67-936e-471d-a909-d19daf7bc79c"
+            info="last updated: 2023 -01-13"
             options={productState.context.products}
           />
         </section>
 
-        {/*<Button variant="outline-secondary" onClick={handleShow}>*/}
-        {/*  New release*/}
-        {/*</Button>*/}
+        <Button variant="outline-secondary" onClick={handleShow}>
+          New release
+        </Button>
       </div>
+
+      {/*Add/Edit release modal*/}
+      <CustomModal show={show} />
     </>
   );
 };

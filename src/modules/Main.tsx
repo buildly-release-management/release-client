@@ -12,9 +12,9 @@ const Main = () => {
     <>
       <MainNavbar />
       <div className="container">
-        <div className="toolbar">
-          <ProjectSelect orgUuid={orgUuid} />
-        </div>
+        {/*<div className="toolbar">*/}
+        <ProjectSelect orgUuid={orgUuid} />
+        {/*</div>*/}
       </div>
 
       <Routes>
