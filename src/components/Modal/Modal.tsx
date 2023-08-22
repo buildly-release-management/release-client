@@ -3,7 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Select from "../Select";
 import { ReleaseService } from "../../services/release.service";
 import { Release } from "../../interfaces/release";
 
@@ -11,7 +10,7 @@ const releaseService = new ReleaseService();
 
 interface ModalProps {
   show: boolean;
-  products: { label: string; value: string }[];
+  // products: { label: string; value: string }[];
 }
 
 const CustomModal = (props: ModalProps) => {
@@ -91,15 +90,15 @@ const CustomModal = (props: ModalProps) => {
               />
             </Form.Group>
             {/*product*/}
-            <Form.Group className="mb-3" controlId="product">
-              <Select
-                name="product_uuid"
-                label="Select a product"
-                options={props.products}
-                required={true}
-                onChange={(event) => updateFormData(event)}
-              />
-            </Form.Group>
+            {/*<Form.Group className="mb-3" controlId="product">*/}
+            {/*  <Select*/}
+            {/*    name="product_uuid"*/}
+            {/*    label="Select a product"*/}
+            {/*    options={props.products}*/}
+            {/*    required={true}*/}
+            {/*    onChange={(event) => updateFormData(event)}*/}
+            {/*  />*/}
+            {/*</Form.Group>*/}
           </Form>
         </Modal.Body>
         <Modal.Footer>

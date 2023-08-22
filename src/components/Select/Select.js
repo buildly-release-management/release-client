@@ -2,13 +2,23 @@ import React from "react";
 import "./Select.css";
 import PropTypes from "prop-types";
 
-const Select = ({ name, size, label, options, info, required, onChange }) => {
+const Select = ({
+  name,
+  size,
+  value,
+  label,
+  options,
+  info,
+  required,
+  onChange,
+}) => {
   return (
     <label className={`select-component select-component--${size}`}>
       <span className="label">{label}</span>
       <select
         className="form-select"
         name={name}
+        value={value}
         required={required}
         onChange={onChange}
       >
@@ -27,6 +37,7 @@ const Select = ({ name, size, label, options, info, required, onChange }) => {
 Select.propTypes = {
   name: PropTypes.string,
   size: PropTypes.oneOf(["medium", "large"]),
+  value: PropTypes.string,
   label: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({

@@ -46,6 +46,7 @@ const BarChart = ({
         stacked: true,
       },
     },
+    maintainAspectRatio: false,
   };
 
   const chartData = {
