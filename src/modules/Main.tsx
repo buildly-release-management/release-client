@@ -11,17 +11,15 @@ const Main = () => {
   return (
     <>
       <MainNavbar />
-      <div className="container">
-        {/*<div className="toolbar">*/}
-        <ProjectSelect orgUuid={orgUuid} />
-        {/*</div>*/}
-      </div>
+      <ProjectSelect orgUuid={orgUuid} />
 
-      <Routes>
-        <Route path="/" element={<ReleaseList />} />
-        <Route path="releases" element={<ReleaseList />} />
-        <Route path="releases/:releaseUuid" element={<ReleaseDetails />} />
-      </Routes>
+      <div className="main-container">
+        <Routes>
+          <Route path="/" element={<ReleaseList />} />
+          <Route path="releases" element={<ReleaseList />} />
+          <Route path="releases/:releaseUuid" element={<ReleaseDetails />} />
+        </Routes>
+      </div>
     </>
   );
 };

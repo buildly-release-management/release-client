@@ -53,7 +53,7 @@ const ProjectSelect = ({ orgUuid }: any) => {
           />
         </section>
 
-        <Button variant="outline-secondary" onClick={handleShow}>
+        <Button variant="outline-secondary" size="sm" onClick={handleShow}>
           New release
         </Button>
       </div>

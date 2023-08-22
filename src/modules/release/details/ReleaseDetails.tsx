@@ -18,10 +18,14 @@ import {
 import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { ProgressBar } from "react-bootstrap";
+import { ProgressBar, Tab, Tabs } from "react-bootstrap";
+import ReleaseForm from "./components/ReleaseForm";
 
 function ReleaseDetails() {
   const { releaseUuid } = useParams();
+
+  // Tabs
+  const [tabKey, setTabKey] = React.useState<string>("report");
 
   // Sample data
   const pieChartLabels = ["Done", "In progress", "Overdue"];
@@ -164,73 +168,102 @@ function ReleaseDetails() {
 
   return (
     <>
-      <div className="container">
-        <section className="toolbar">
-          {" "}
-          <h6>{releaseUuid}</h6>
-        </section>
-        {/*<Card>*/}
-        {/*  <Card.Body>*/}
-        {/*    <h6>{releaseUuid}</h6>*/}
-        {/*  </Card.Body>*/}
-        {/*</Card>*/}
+      <section className="toolbar">
+        {" "}
+        <h6>{releaseUuid}</h6>
+      </section>
 
-        <div className="container-fluid my-2">
-          <div className="row">
-            <div className="col chart-container">
-              <DoughnutChart
-                id="releases"
-                labels={pieChartLabels}
-                label={pieChartLabel}
-                data={pieChartData}
-              />
-            </div>
-            <div className="col chart-container">
-              <BarChart
-                id="features"
-                label="Features summary"
-                labels={barChartLabels}
-                data={barChartData}
-                backgroundColor={backgroundColor}
-                borderWidth={borderWidth}
-                borderColor={borderColor}
-              />
-            </div>
-            <div className="col chart-container">
-              <BarChart
-                id="issues"
-                label="Issues summary"
-                labels={barChartLabels}
-                data={barChartData}
-                backgroundColor={backgroundColor}
-                borderWidth={borderWidth}
-                borderColor={borderColor}
-              />
+      <Tabs
+        id="release-details-tabs"
+        activeKey={tabKey}
+        onSelect={(k) => {
+          if (k) {
+            setTabKey(k);
+          }
+        }}
+      >
+        <Tab eventKey="report" title="Report">
+          <div className="container-fluid my-2">
+            <div className="row">
+              <div className="col chart-container">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </div>
+              <div className="col chart-container">
+                <BarChart
+                  id="features"
+                  label="Features summary"
+                  labels={barChartLabels}
+                  data={barChartData}
+                  backgroundColor={backgroundColor}
+                  borderWidth={borderWidth}
+                  borderColor={borderColor}
+                />
+              </div>
+              <div className="col chart-container">
+                <BarChart
+                  id="issues"
+                  label="Bugs summary"
+                  labels={barChartLabels}
+                  data={barChartData}
+                  backgroundColor={backgroundColor}
+                  borderWidth={borderWidth}
+                  borderColor={borderColor}
+                />
+              </div>
             </div>
           </div>
-        </div>
-
-        <TableContainer component={Paper}>
-          <Table aria-label="collapsible table">
-            <TableHead>
-              <TableRow>
-                <TableCell />
-                <TableCell>Name</TableCell>
-                <TableCell>Progress</TableCell>
-                <TableCell align="right">Status</TableCell>
-                <TableCell align="center">Features</TableCell>
-                <TableCell align="center">Issues</TableCell>
-                <TableCell align="right">Release date</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <Row key={row.name} row={row} />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
+          <div className="container-fluid my-2">
+            <div className="row">
+              <div className="col chart-container">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </div>
+              <div className="col chart-container">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </div>
+            </div>
+          </div>
+        </Tab>
+        <Tab eventKey="details" title="Details">
+          <ReleaseForm />
+        </Tab>
+        <Tab eventKey="features-issues" title="Features & Issues">
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell>Name</TableCell>
+                  <TableCell>Progress</TableCell>
+                  <TableCell align="right">Status</TableCell>
+                  <TableCell align="center">Features</TableCell>
+                  <TableCell align="center">Issues</TableCell>
+                  <TableCell align="right">Release date</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <Row key={row.name} row={row} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Tab>
+      </Tabs>
     </>
   );
 }
