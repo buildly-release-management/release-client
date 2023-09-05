@@ -1,0 +1,37 @@
+// Color Palette
+$white: #fff;
+$black: #000;
+
+$blue: #0c5595;
+$orange: #f9943b;
+$red: #c91b1a;
+
+// Color Variations
+$orange-lightest: #fddec4;
+
+// Defaults variables
+$color-primary: $blue;
+$color-secondary: $orange;
+$color-danger: $red;
+
+// change the theme
+$theme-colors: (
+  "primary": $color-primary,
+  "secondary": $color-secondary,
+  "danger": $color-danger,
+);
+
+// Import Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap.scss";
+
+.btn-secondary {
+  color: $white;
+  &:hover {
+    color: $white;
+  }
+}
+
+.btn-outline-secondary:hover {
+  background-color: $orange-lightest;
+  color: $color-secondary;
+}
