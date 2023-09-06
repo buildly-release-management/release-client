@@ -1,19 +1,13 @@
-import { useMachine } from "@xstate/react";
-import { releaseMachine } from "../../../state/release/release";
-import { ReleaseService } from "../../../services/release.service";
-import Table from "react-bootstrap/Table";
-import { Release } from "../../../interfaces/release";
-import React, { useState } from "react";
-import CustomModal from "../../../components/Modal/Modal";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import { Card, ProgressBar, Stack } from "react-bootstrap";
+import React from "react";
+import { useParams } from "react-router-dom";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
+import "./ReleaseDetails.css";
 import {
   Box,
   Collapse,
   IconButton,
+  Table,
   TableBody,
   TableCell,
   TableContainer,
@@ -22,39 +16,23 @@ import {
   Typography,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { ProgressBar, Tab, Tabs } from "react-bootstrap";
+import ReleaseForm from "./components/ReleaseForm";
 
-const orgUuid = "baa50960-1a98-4ced-bb16-b60662ddea55";
-const releaseService = new ReleaseService();
+function ReleaseDetails() {
+  const { releaseUuid } = useParams();
 
-function ReleaseList() {
-  const [state, send] = useMachine(releaseMachine, {
-    services: {
-      loadReleases: async (): Promise<any> => {
-        return releaseService.loadReleases("");
-      },
-    },
-  });
-
-  // Add/Edit release modal
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // Tabs
+  const [tabKey, setTabKey] = React.useState<string>("report");
 
   // Sample data
-  const pieChartLabel = "Releases summary";
   const pieChartLabels = ["Done", "In progress", "Overdue"];
+  const pieChartLabel = "Releases summary";
   const pieChartData = [7, 5, 3];
 
-  const barChartLabels = [
-    "Release 1",
-    "Release 2",
-    "Release 3",
-    "Release 4",
-    "Release 5",
-    "Release 6",
-  ];
+  const barChartLabels = ["bike", "car", "scooter", "truck", "auto", "Bus"];
   const barChartData = [
     {
       label: "Done",
@@ -190,115 +168,103 @@ function ReleaseList() {
 
   return (
     <>
-      {/*handleShow*/}
+      <section className="toolbar">
+        {" "}
+        <h6>{releaseUuid}</h6>
+      </section>
 
-      <div className="container-fluid my-2">
-        <div className="row">
-          <div className="col chart-container">
-            <DoughnutChart
-              id="releases"
-              labels={pieChartLabels}
-              label={pieChartLabel}
-              data={pieChartData}
-            />
+      <Tabs
+        id="release-details-tabs"
+        activeKey={tabKey}
+        onSelect={(k) => {
+          if (k) {
+            setTabKey(k);
+          }
+        }}
+      >
+        <Tab eventKey="report" title="Report">
+          <div className="container-fluid my-2">
+            <div className="row">
+              <div className="col chart-container">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </div>
+              <div className="col chart-container">
+                <BarChart
+                  id="features"
+                  label="Features summary"
+                  labels={barChartLabels}
+                  data={barChartData}
+                  backgroundColor={backgroundColor}
+                  borderWidth={borderWidth}
+                  borderColor={borderColor}
+                />
+              </div>
+              <div className="col chart-container">
+                <BarChart
+                  id="issues"
+                  label="Bugs summary"
+                  labels={barChartLabels}
+                  data={barChartData}
+                  backgroundColor={backgroundColor}
+                  borderWidth={borderWidth}
+                  borderColor={borderColor}
+                />
+              </div>
+            </div>
           </div>
-          <div className="col chart-container">
-            <BarChart
-              id="features"
-              label="Features summary"
-              labels={barChartLabels}
-              data={barChartData}
-              backgroundColor={backgroundColor}
-              borderWidth={borderWidth}
-              borderColor={borderColor}
-            />
+          <div className="container-fluid my-2">
+            <div className="row">
+              <div className="col chart-container">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </div>
+              <div className="col chart-container">
+                <DoughnutChart
+                  id="releases"
+                  labels={pieChartLabels}
+                  label={pieChartLabel}
+                  data={pieChartData}
+                />
+              </div>
+            </div>
           </div>
-          <div className="col chart-container">
-            <BarChart
-              id="issues"
-              label="Issues summary"
-              labels={barChartLabels}
-              data={barChartData}
-              backgroundColor={backgroundColor}
-              borderWidth={borderWidth}
-              borderColor={borderColor}
-            />
-          </div>
-        </div>
-      </div>
-
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Name</TableCell>
-              <TableCell>Progress</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="center">Features</TableCell>
-              <TableCell align="center">Issues</TableCell>
-              <TableCell align="right">Release date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <Row key={row.name} row={row} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Card>
-        <Card.Body>
-          <Card.Title>
-            <Stack direction="horizontal" gap={3}>
-              <h4>Releases</h4>
-
-              {/*<Button*/}
-              {/*  className=" ms-auto"*/}
-              {/*  variant="outline-secondary"*/}
-              {/*  size="sm"*/}
-              {/*  onClick={handleShow}*/}
-              {/*>*/}
-              {/*  New release*/}
-              {/*</Button>*/}
-            </Stack>
-          </Card.Title>
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Release date</th>
-                <th>Features</th>
-              </tr>
-            </thead>
-            <tbody>
-              {state.matches("Releases Loaded") &&
-                state.context.releases.map((release: Release) => (
-                  <tr key={release.release_uuid}>
-                    <td>
-                      <Link
-                        to={{
-                          pathname: `/releases/${release.release_uuid}`,
-                        }}
-                      >
-                        {release.name}
-                      </Link>{" "}
-                    </td>
-                    <td>{release.release_date}</td>
-                    <td>{release.features_count}</td>
-                  </tr>
+        </Tab>
+        <Tab eventKey="details" title="Details">
+          <ReleaseForm />
+        </Tab>
+        <Tab eventKey="features-issues" title="Features & Issues">
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell>Name</TableCell>
+                  <TableCell>Progress</TableCell>
+                  <TableCell align="right">Status</TableCell>
+                  <TableCell align="center">Features</TableCell>
+                  <TableCell align="center">Issues</TableCell>
+                  <TableCell align="right">Release date</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <Row key={row.name} row={row} />
                 ))}
-            </tbody>
-          </Table>
-          <Button variant="primary">Go somewhere</Button>
-        </Card.Body>
-      </Card>
-
-      {/*Add/Edit release modal*/}
-      <CustomModal show={show} />
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Tab>
+      </Tabs>
     </>
   );
 }
-
-export default ReleaseList;
+export default ReleaseDetails;

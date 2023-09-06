@@ -1,0 +1,6 @@
+.main-container {
+  height: 100vh;
+  flex-grow: 1;
+  max-width: 100% !important;
+  padding: 0 24px 0;
+}
