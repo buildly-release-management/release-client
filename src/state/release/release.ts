@@ -1,107 +1,104 @@
-import { createMachine, assign } from 'xstate';
+import {createMachine, assign} from 'xstate';
 import { Release } from '../../interfaces/release';
+import {loadReleases, submitRelease} from './actions';
 
 export const releaseMachine = createMachine(
-  {
-    /** @xstate-layout N4IgpgJg5mDOIC5QCcwBswENZwHQFEA7AF2QE9cAZAe0wgEtCoBiCawsXRgN2oGtOqDNjxFSFGnUZQEPagGNMxeuwDaABgC6GzYlAAHarHrL2ekAA9EAWgDsAJgCsudQA5HATgDMtxwBoQMhsAFkd1XGD1ADYnAF9YgKEsHFgCEnIqWgYmZjBkZGpkXH00JQAzQoBbXCSRVLEMyWyZOUVTQh0dc0NjdvMrBGtg21tcD1dXe1cARicAoMHHWw9cSfUvWcd4xPRk0XSJLMhmC1hiJU5MMuI8gAow9QBKZlqUtPFMukgupBAekxUhH6NiiriiuEcXg80TmgRs9mC4Ki6kciNcvnUmMxUW2IFe+w+ADEqgARJSYZgAZQArgAjSomH4GIwAsy-AbWKajDz2KIeWw+exeKLLabzGxhXBedTTaZLOX2FEI4K4-H1A64YnISpk85UukM4iqaa6X7-Prs+FTVYTWzTFFhXm2aLiwbTUEuKKOGZykYeDyg1W7Oq4Gn0kzKHKwanyeRwWBMv4si2gAa85xhL3BIX2WXRAOuzn+3BRe1hRze4JeLy8oPCN5hw2Rlh5Ar5b5abrJwHAhD21y4BG2KLBOX+mZuKKF6Y1qXBbOKjzTVxQis43GEagQODmNVd3o9y2DSbTFzuby+Qu+cGuKu+abjdT2AVeOt7dXifesoFHuwCs+eD4-hwoMUR8nOQHqP6MrCuuOz1gSjRZNIX4ppYNjOqeK7OsKM5TJshbelhd5bAkeLBm8DSHF8ECoYeqYgr4LhQjCwELNYGyntEI6sW+IZUZ8ECEpg9AYLRZrdmyDGDIi4Rge6NZeI4TgeEsbEhMKg63sEAZET6Xp8ZRGpajq5J0VJ6GgSuWnQjE6lut6c7Zl4kwzHEZFqqGBomMJomQOZP7ST4cmjuWkQeME6LDtOTgRDyLHKuMwyuIZeCNhG-kSQeFkDKOoxTBFXg6aWz62Cuhb2MWpbqJFmKQnyEypak6XEM2AW9isRFFY4yKTNKsxeIWyLBBErg1a4S5REpNbTE1Xnhq10i4AAwqgSgoVl369p4JYitKKJyhNymuIR7pjGNkUzC+qmkfB77zU2S0AKr6BA61MO1R5LBCMzdb1QoyvYhajiskS2Nm9q8pV2nxPEQA */
-    tsTypes: {} as import('./release.typegen').Typegen0,
+    {
+        /** @xstate-layout N4IgpgJg5mDOIC5QCcwBswENZwHQFEA7AF2QE9cAZAe0wgEtCoBiCawsXRgN2oGtOqDNjxFSFGnUZQEPagGNMxeuwDaABgC6GzYlAAHarHrL2ekAA9EAJgAsARlwAOe-YfWXANntOnAdgBWABoQMkQAWld1XABmewCA208ATgDPGPV7T08AXxyQoSwcWAIScipaBiZmMGRkamRcfTQlADMGgFtcQpESsXLJKpk5RVNCHR1zQ2Mx8ysEGO9cWxXrawC4719AkLCF6Jjktydba2TF5KcY2zyC9CLRMolKyGYLWGIlTkxW4lqACgC6nUAEpmD1iqVxBU6JBJkgQNMTCpCHNEJ5rH5lkd7MDNj5-LsIjEArh1N5PLZ1H5yRksrl8iAIY9oQAxToAESUmGYAGUAK4AIw6JnhBiMyLMCPmuMSZPJfnW+O2RIQTmcHkup3OKSuN0ZzL6T1w7OQHS5nz5QpFxFU9l0CKRs2liCiMVwa3OLjSW0JoQiWXdmScnj89lS6Uy2VuTPuvVwAuFJmUTFwAFV9BAlNJWOxOHIBN045DEzaU1B05ns0xZIReKMURMtFMJc7QPNkh5cPYaU5yelOwF7NZVdZPAcAnZrD2dZdrjHDQnrcnpJWs+WanUGk0WsR2mai8IS8viOW19XhnWFNm1FoxYjWyi0QgktFpzFAp4fQSdv6EOH1WBWw-C-RILj1BdixZcoAEkIAwZhBnvJ0nxdf9MkcXEnA8PwvB-VVKXdWwNmSYDwzsDYAjyRlCGoCA4HMQ0WxmVD21dYjnFcdw8O2YI-3CDxSTiBIkgjOlowNKCjXEZjJVRNDw3dFw3GHHj-D4vZImSLFvUSFI0nEhk7iPaDnikJhZLbSxEF8IMUjWDYsnwv9bF8Zx1FIjZ1FscD50kkzpIGF4IEs1jrIQbTklwVJrHUH1DnWYdVSyaxlicSdh1wzFfCM2MAqhIK6FZTB6AwELHUfKU2IWSlcFDEM8Sc3iCNOD11EOMjO2IklIPy-oKFNc1uVCqrwoSaIAj8OJhOyZy9k8JwouHbTVIynx9WMh5AooOCMBG+TqpOWxcCHbrcKav15ta2KOrDLrKN6ralyTYhitKyB9ufSaotsHFGt9PxVV8UkvTOXFXFwmIYke+NS2TD6KpY0b5m+7Eonai7Ab-XFYuWGIrnJFbQyo-ynrh09pE+hSUrquJFUcgHkppE7cK1M5fI2vKyZPM8AGFUAvKnquHXFaZ7JVMdHAJANZk52d1PzNthnnVwzddKcRuTnxF6J0nFhm5sQHyosmxaMSy3D0uonIgA */
+        tsTypes: {} as import('./release.typegen').Typegen0,
 
-    schema: {
-      services: {} as {
-        loadReleases: { data: Release };
-        submitRelease: { data: Release };
-      },
-    },
-
-    context: {
-      releases: [] as any,
-      error: undefined as string | undefined,
-    },
-
-    id: 'releases',
-
-    states: {
-      Entry: {
-        states: {
-          Loading: {
-            invoke: {
-              src: 'loadReleases',
-              onDone: [
-                {
-                    target: 'Loaded',
-                    actions: 'addReleasesToContext'
-                }
-              ],
-              onError: [
-                {
-                    target: 'LoadFailed',
-                    actions: 'addErrorToCxt'
-                }
-
-              ]
-            }
-          },
-
-          Loaded: {
-            after: {
-              "500": "FormData"
-            }
-          },
-
-          LoadFailed: {},
-
-          FormData: {
-            on: {
-              Submit: [{
-                target: "#releases.Submitting.Updating",
-                cond: "release_uuid"
-              }, "#releases.Submitting.Creating"]
-            }
-          }
+        context: {
+            releases: [] as any,
+            error: undefined as string | undefined,
         },
 
-        initial: "Loading"
-      },
+        id: 'releases',
 
-      SubmitFailed: {},
-      Submitted: {},
-
-      Submitting: {
         states: {
-          Creating: {
-            invoke: {
-              src: 'submitRelease'
+            Entry: {
+                states: {
+                    Loading: {
+                        invoke: {
+                            src: loadReleases,
+                            onDone: [
+                                {
+                                    target: 'Loaded',
+                                    actions: 'addReleasesToContext'
+                                }
+                            ],
+                            onError: [
+                                {
+                                    target: 'LoadFailed',
+                                    actions: 'addErrorToCxt'
+                                }
+
+                            ]
+                        }
+                    },
+
+                    Loaded: {
+                        after: {
+                            "500": "FormData"
+                        }
+                    },
+
+                    LoadFailed: {},
+
+                    FormData: {
+                        on: {
+                            Submit: [{
+                                target: "#releases.Submitting.Updating",
+                                cond: "release_uuid"
+                            }, "#releases.Submitting.Creating"]
+                        }
+                    },
+
+                    Idle: {
+                        on: {
+                            Load: "Loading"
+                        }
+                    }
+                },
+
+                initial: "Idle"
             },
-          },
-          Updating: {
-            invoke: {
-              src: 'submitRelease',
-              onDone: {actions: 'addSingleReleaseToCxt', target: '#releases.Submitted'},
-              onError: {actions:'addErrorToCxt', target: '#releases.SubmitFailed'}
-            },
-          }
+
+            SubmitFailed: {},
+            Submitted: {},
+
+            Submitting: {
+                states: {
+                    Creating: {
+                        invoke: {
+                            src: submitRelease
+                        },
+                    },
+                    Updating: {
+                        invoke: {
+                            src: submitRelease,
+                            onDone: {actions: 'addSingleReleaseToCxt', target: '#releases.Submitted'},
+                            onError: {actions: 'addErrorToCxt', target: '#releases.SubmitFailed'}
+                        },
+                    }
+                }
+            }
         },
 
-        on: {
-          success: "Submitted",
-          errorred: "SubmitFailed"
-        }
-      }
+        initial: "Entry"
     },
-
-    initial: "Entry"
-  },
-  {
-    actions: {
-      addReleasesToContext: assign((context, event) => {
-        return { releases: event.data };
-      }),
-      addErrorToCxt: assign((context, event) => {
-        return { error: (event.data as Error).message };
-      }),
-      addSingleReleaseToCxt: assign((context, event) => {
-        return {...context.releases, ...event.data}
-      })
-    },
-  }
+    {
+        actions: {
+            addReleasesToContext: assign(
+                (context, event) => {
+                return {releases: event.data};
+            }),
+            addErrorToCxt: assign((context, event) => {
+                return {error: (event.data as Error).message};
+            }),
+            addSingleReleaseToCxt: assign((context, event) => {
+                const releases = [...context.releases, event.data]
+                return {...{releases}}
+            })
+        },
+    }
 );

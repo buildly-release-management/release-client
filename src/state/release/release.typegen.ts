@@ -12,14 +12,13 @@
 "xstate.init": { type: "xstate.init" };
         };
         invokeSrcNameMap: {
-          "loadReleases": "done.invoke.releases.Entry.Loading:invocation[0]";
-"submitRelease": "done.invoke.releases.Submitting.Creating:invocation[0]" | "done.invoke.releases.Submitting.Updating:invocation[0]";
+          
         };
         missingImplementations: {
           actions: never;
           delays: never;
           guards: "release_uuid";
-          services: "loadReleases" | "submitRelease";
+          services: never;
         };
         eventsCausingActions: {
           "addErrorToCxt": "error.platform.releases.Entry.Loading:invocation[0]" | "error.platform.releases.Submitting.Updating:invocation[0]";
@@ -33,10 +32,9 @@
           "release_uuid": "Submit";
         };
         eventsCausingServices: {
-          "loadReleases": "xstate.init";
-"submitRelease": "Submit";
+          
         };
-        matchesStates: "Entry" | "Entry.FormData" | "Entry.LoadFailed" | "Entry.Loaded" | "Entry.Loading" | "SubmitFailed" | "Submitted" | "Submitting" | "Submitting.Creating" | "Submitting.Updating" | { "Entry"?: "FormData" | "LoadFailed" | "Loaded" | "Loading";
+        matchesStates: "Entry" | "Entry.FormData" | "Entry.Idle" | "Entry.LoadFailed" | "Entry.Loaded" | "Entry.Loading" | "SubmitFailed" | "Submitted" | "Submitting" | "Submitting.Creating" | "Submitting.Updating" | { "Entry"?: "FormData" | "Idle" | "LoadFailed" | "Loaded" | "Loading";
 "Submitting"?: "Creating" | "Updating"; };
         tags: never;
       }
