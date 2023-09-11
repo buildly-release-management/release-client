@@ -3,7 +3,6 @@ import { useMachine } from "@xstate/react";
 import { productMachine } from "../../state/product/product";
 import { ProductService } from "../../services/product.service";
 import Select from "../Select";
-import Button from "react-bootstrap/Button";
 import CustomModal from "../Modal/Modal";
 import "./ProjectSelect.css";
 
@@ -20,10 +19,9 @@ const ProjectSelect = ({ orgUuid }: any) => {
     context: {
       products: [],
       error: undefined,
-      organization_uuid: 'baa50960-1a98-4ced-bb16-b60662ddea55',
-      selectedProduct: null
-
-    }
+      organization_uuid: "baa50960-1a98-4ced-bb16-b60662ddea55",
+      selectedProduct: null,
+    },
   });
 
   return (
@@ -39,9 +37,9 @@ const ProjectSelect = ({ orgUuid }: any) => {
           />
         </section>
 
-        <Button variant="outline-secondary" size="sm" onClick={handleShow}>
-          New release
-        </Button>
+        {/*<Button variant="outline-secondary" size="sm" onClick={handleShow}>*/}
+        {/*  New release*/}
+        {/*</Button>*/}
       </div>
 
       {/*Add/Edit release modal*/}
