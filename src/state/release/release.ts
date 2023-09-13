@@ -48,7 +48,7 @@ export const releaseMachine = createMachine(
                         on: {
                             Submit: [{
                                 target: "#releases.Submitting.Updating",
-                                cond: "release_uuid"
+                                cond: (context, event) => Boolean(event.release_uuid)
                             }, "#releases.Submitting.Creating"]
                         }
                     },

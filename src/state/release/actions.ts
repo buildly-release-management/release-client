@@ -10,8 +10,9 @@ const loadReleases = (context: any, event: any) => new Promise((resolve, reject)
 
 
 const submitRelease = (context: any, event: any) => new Promise((resolve, reject) => {
+    console.log('Event: ', event)
     const releaseService = new ReleaseService();
-    return resolve(releaseService.submitRelease(event.payload));
+    return resolve(releaseService.submitRelease(event.release));
 })
 
 
