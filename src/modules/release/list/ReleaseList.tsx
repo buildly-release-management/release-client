@@ -49,7 +49,7 @@ function ReleaseList() {
         // set current product
         if (productState.context.selectedProduct) {
             setCurrentProduct(productState.context.selectedProduct);
-            send("Load", {product_uuid: productState.context.selectedProduct.value});
+            send("Load", {product_uuid: productState.context.selectedProduct.product_uuid});
         }
     }, [productState]);
 
@@ -72,7 +72,7 @@ function ReleaseList() {
     const submitRelease = (event: any) => {
         event.preventDefault();
         if(currentProduct) {
-            const data = {product_uuid: currentProduct.value, ...formData}
+            const data = {product_uuid: currentProduct.product_uuid, ...formData}
             send('Submit', {release: data})
         }
     };
