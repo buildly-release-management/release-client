@@ -26,12 +26,25 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { productMachine } from "../../../state/product/product";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
+import { HttpService } from "../../../services/http.service";
 
 const releaseService = new ReleaseService();
+const httpService = new HttpService();
+
+interface BarChartData {
+  label: string;
+  key: string;
+  backgroundColor: string;
+  data: number[];
+}
 
 function ReleaseList() {
   // define current product (select from product state)
   const [currentProduct, setCurrentProduct] = useState(null as any);
+
+  // define release summary
+  const [releasesSummary, setReleasesSummary] = useState(null as any);
+
   // @ts-ignore
   const [productState] = useMachine(productMachine, {
     context: {
@@ -49,6 +62,18 @@ function ReleaseList() {
     },
   });
 
+  // let barChartLabels = [
+  //   "Release 1",
+  //   "Release 2",
+  //   "Release 3",
+  //   "Release 4",
+  //   "Release 5",
+  //   "Release 6",
+  // ];
+
+  let featuresReleaseNames: string[] = [];
+  let issuesReleaseNames: string[] = [];
+
   useEffect(() => {
     // set current product
     if (productState.context.selectedProduct) {
@@ -56,8 +81,83 @@ function ReleaseList() {
       send("Load", {
         product_uuid: productState.context.selectedProduct.product_uuid,
       });
+
+      try {
+        httpService
+          .fetchData(
+            `/release/release_summary/?product_uuid=${productState.context.selectedProduct.product_uuid}`,
+            "release"
+          )
+          .then((response: any) => {
+            // Construct issues summary data
+            const issuesSummaryObj = generateBarChartData(
+              response.data.issues,
+              "issues_data"
+            );
+            issuesReleaseNames = issuesSummaryObj.releaseNames;
+
+            // Construct features summary data
+            const featuresSummaryObj = generateBarChartData(
+              response.data.features,
+              "features_data"
+            );
+            featuresReleaseNames = featuresSummaryObj.releaseNames;
+
+            setReleasesSummary({
+              releases: Object.values(response.data.releases),
+              features: featuresSummaryObj.barChartSummaryData,
+              issues: issuesSummaryObj.barChartSummaryData,
+            });
+          });
+      } catch (httpError) {
+        console.log("httpError : ", httpError);
+      }
     }
   }, [productState]);
+
+  /**
+   * Construct bar chart data
+   * @param data
+   * @param dataField
+   */
+  const generateBarChartData = (data: any, dataField: string) => {
+    const releaseNames: string[] = [];
+    const barChartSummaryData: BarChartData[] = [
+      {
+        label: "Completed",
+        key: "completed",
+        backgroundColor: "#0D5595",
+        data: [],
+      },
+      {
+        label: "In progress",
+        key: "in_progress",
+        backgroundColor: "#F8943C",
+        data: [],
+      },
+      {
+        label: "Overdue",
+        key: "overdue",
+        backgroundColor: "#C91B1A",
+        data: [],
+      },
+    ];
+
+    data.forEach((entry: any) => {
+      releaseNames.push(entry.release);
+      Object.keys(entry[dataField]).forEach((key) => {
+        const index = barChartSummaryData.findIndex(
+          (summaryEntry) => summaryEntry.key === key
+        );
+
+        if (index > -1) {
+          barChartSummaryData[index].data.push(entry[dataField][key]);
+        }
+      });
+    });
+
+    return { releaseNames, barChartSummaryData };
+  };
 
   // Add/Edit release modal
   const [showReleaseModal, setShow] = useState(false);
@@ -84,35 +184,7 @@ function ReleaseList() {
   };
 
   // Sample data
-  const pieChartLabel = "Releases summary";
-  const pieChartLabels = ["Done", "In progress", "Overdue"];
-  const pieChartData = [7, 5, 3];
-
-  const barChartLabels = [
-    "Release 1",
-    "Release 2",
-    "Release 3",
-    "Release 4",
-    "Release 5",
-    "Release 6",
-  ];
-  const barChartData = [
-    {
-      label: "Done",
-      backgroundColor: "#0D5595",
-      data: [17, 16, 4, 11, 8, 9],
-    },
-    {
-      label: "In progress",
-      backgroundColor: "#F8943C",
-      data: [14, 2, 10, 6, 12, 16],
-    },
-    {
-      label: "Overdue",
-      backgroundColor: "#C91B1A",
-      data: [2, 21, 13, 3, 24, 7],
-    },
-  ];
+  const pieChartLabels = ["Completed", "Overdue", "In progress"];
   const backgroundColor = "#02b844";
   const borderWidth = 1;
   const borderColor = "#000000";
@@ -240,40 +312,42 @@ function ReleaseList() {
         </Button>
       </div>
 
-      <div className="container-fluid my-2">
-        <div className="row">
-          <div className="col chart-container">
-            <DoughnutChart
-              id="releases"
-              labels={pieChartLabels}
-              label={pieChartLabel}
-              data={pieChartData}
-            />
-          </div>
-          <div className="col chart-container">
-            <BarChart
-              id="features"
-              label="Features summary"
-              labels={barChartLabels}
-              data={barChartData}
-              backgroundColor={backgroundColor}
-              borderWidth={borderWidth}
-              borderColor={borderColor}
-            />
-          </div>
-          <div className="col chart-container">
-            <BarChart
-              id="issues"
-              label="Issues summary"
-              labels={barChartLabels}
-              data={barChartData}
-              backgroundColor={backgroundColor}
-              borderWidth={borderWidth}
-              borderColor={borderColor}
-            />
+      {releasesSummary && (
+        <div className="container-fluid my-2">
+          <div className="row">
+            <div className="col chart-container">
+              <DoughnutChart
+                id="releases"
+                labels={pieChartLabels}
+                label="Releases summary"
+                data={releasesSummary?.releases}
+              />
+            </div>
+            <div className="col chart-container">
+              <BarChart
+                id="features"
+                label="Features summary"
+                labels={featuresReleaseNames}
+                data={releasesSummary?.features}
+                backgroundColor={backgroundColor}
+                borderWidth={borderWidth}
+                borderColor={borderColor}
+              />
+            </div>
+            <div className="col chart-container">
+              <BarChart
+                id="issues"
+                label="Issues summary"
+                labels={issuesReleaseNames}
+                data={releasesSummary?.issues}
+                backgroundColor={backgroundColor}
+                borderWidth={borderWidth}
+                borderColor={borderColor}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <TableContainer component={Paper} className="mt-4">
         <Table aria-label="collapsible table">
