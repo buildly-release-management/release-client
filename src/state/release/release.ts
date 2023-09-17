@@ -1,6 +1,6 @@
 import {createMachine, assign} from 'xstate';
-import { Release } from '../../interfaces/release';
-import {loadReleases, submitRelease} from './actions';
+import {Release} from '../../interfaces/release';
+import {loadReleases, submitRelease, deleteRelease} from './actions';
 
 export const releaseMachine = createMachine(
     {
@@ -49,7 +49,8 @@ export const releaseMachine = createMachine(
                             Submit: [{
                                 target: "#releases.Submitting.Updating",
                                 cond: (context, event) => Boolean(event.release_uuid)
-                            }, "#releases.Submitting.Creating"]
+                            }, "#releases.Submitting.Creating"],
+                            Delete: "#releases.Deleting"
                         }
                     },
 
@@ -65,7 +66,15 @@ export const releaseMachine = createMachine(
 
             SubmitFailed: {},
             Submitted: {},
+            Deleting: {
+                invoke: {
+                    src: deleteRelease,
+                    onDone: {actions: 'removeItemFromCxt', target: '#releases.Deleted'},
+                    onError: {actions: 'addErrorToCxt'},
+                },
 
+            },
+            Deleted: {},
             Submitting: {
                 states: {
                     Creating: {
@@ -90,15 +99,24 @@ export const releaseMachine = createMachine(
         actions: {
             addReleasesToContext: assign(
                 (context, event) => {
-                return {releases: event.data};
-            }),
+                    return {releases: event.data};
+                }),
             addErrorToCxt: assign((context, event) => {
                 return {error: (event.data as Error).message};
             }),
             addSingleReleaseToCxt: assign((context, event) => {
                 const releases = [...context.releases, event.data]
                 return {...{releases}}
+            }),
+            removeItemFromCxt: assign((context, event) => {
+                const event_data: any = event.data
+                return {
+                    releases: context.releases.filter(
+                        (release: any) => release.release_uuid === event_data.release_uuid
+                    )
+                }
             })
+
         },
     }
 );

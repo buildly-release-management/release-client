@@ -27,6 +27,7 @@ import { productMachine } from "../../../state/product/product";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { HttpService } from "../../../services/http.service";
+import {interpret} from 'xstate';
 
 const releaseService = new ReleaseService();
 const httpService = new HttpService();
@@ -114,6 +115,9 @@ function ReleaseList() {
       }
     }
   }, [productState]);
+
+  const service = interpret(productMachine).start();
+  const serviceSub = service.subscribe((state) => console.log(state));
 
   /**
    * Construct bar chart data
