@@ -1,12 +1,10 @@
 .releases-list-header {
   max-width: 100% !important;
-  /*padding: 16px 24px;*/
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   flex-grow: 1;
-  /*box-sizing: border-box;*/
 }
 
 .chart-container {
