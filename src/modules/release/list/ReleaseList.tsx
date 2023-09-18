@@ -253,8 +253,6 @@ function ReleaseList() {
     let featuresList: any[] = [];
     if (open && row) {
       try {
-        console.log("row : ", row);
-
         httpService
           .fetchData(
             `/feature/?release_features__release_uuid=${row.release_uuid}`,
@@ -320,29 +318,33 @@ function ReleaseList() {
           </TableCell>
         </TableRow>
         <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <TableCell
+            style={{
+              paddingBottom: 0,
+              paddingTop: 0,
+              paddingLeft: 8,
+              backgroundColor: "#f5f5f5",
+            }}
+            colSpan={12}
+          >
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                <Typography variant="h6" gutterBottom component="div">
-                  Features
-                </Typography>
-                <Table size="small" aria-label="purchases">
+                {/*<Typography variant="h6" gutterBottom component="div">*/}
+                {/*  Features*/}
+                {/*</Typography>*/}
+                <Table size="small" aria-label="features">
                   <TableHead>
                     <TableRow>
                       <TableCell>Name</TableCell>
                       <TableCell>Progress</TableCell>
-                      <TableCell>Status</TableCell>
+                      {/*<TableCell>Status</TableCell>*/}
                       <TableCell>Issues</TableCell>
                       <TableCell align="right">Assignees</TableCell>
                       <TableCell align="right">Date Due</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {!featuresList.length && (
-                      <Typography>No features to display</Typography>
-                    )}
-
-                    {featuresList.length &&
+                    {featuresList.length ? (
                       featuresList.map((feature) => (
                         <TableRow key={feature.feature_uuid}>
                           <TableCell component="th" scope="row">
@@ -363,7 +365,10 @@ function ReleaseList() {
                           {/*  ) / 100}*/}
                           {/*</TableCell>*/}
                         </TableRow>
-                      ))}
+                      ))
+                    ) : (
+                      <div className="p-2">No features to display</div>
+                    )}
                   </TableBody>
                 </Table>
               </Box>
@@ -374,90 +379,83 @@ function ReleaseList() {
     );
   }
 
-  // const rows = [
-  //   createData("Release 1", 59, "info", 6.0, 24, 4.0, "2020-01-05"),
-  //   createData("Release 2", 37, "warning", 9.0, 37, 4.3, "2020-01-05"),
-  //   createData("Release 3", 62, "info", 16.0, 24, 6.0, "2020-01-05"),
-  //   createData("Release 4", 15, "danger", 3.7, 67, 4.3, "2020-01-05"),
-  //   createData("Release 5", 56, "info", 16.0, 49, 3.9, "2020-01-05"),
-  // ];
-
   return (
     <>
-      <div className="d-flex justify-content-between">
-        <Typography variant="h5">Releases</Typography>
+      {releasesState.context.releases.length ? (
+        <>
+          <div className="d-flex justify-content-between">
+            <Typography variant="h6">Releases summary</Typography>
 
-        <Button variant="outline-secondary" size="sm" onClick={handleShow}>
-          New release
-        </Button>
-      </div>
-
-      {releasesSummary && (
-        <div className="container-fluid my-2">
-          <div className="row">
-            <div className="col chart-container">
-              <DoughnutChart
-                id="releases"
-                labels={pieChartLabels}
-                label="Releases summary"
-                data={releasesSummary?.releases}
-              />
-            </div>
-            <div className="col chart-container">
-              <BarChart
-                id="features"
-                label="Features summary"
-                labels={featuresReleaseNames}
-                data={releasesSummary?.features}
-                backgroundColor={backgroundColor}
-                borderWidth={borderWidth}
-                borderColor={borderColor}
-              />
-            </div>
-            <div className="col chart-container">
-              <BarChart
-                id="issues"
-                label="Issues summary"
-                labels={issuesReleaseNames}
-                data={releasesSummary?.issues}
-                backgroundColor={backgroundColor}
-                borderWidth={borderWidth}
-                borderColor={borderColor}
-              />
-            </div>
+            <Button variant="outline-secondary" size="sm" onClick={handleShow}>
+              New release
+            </Button>
           </div>
-        </div>
-      )}
 
-      <TableContainer component={Paper} className="mt-4">
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Name</TableCell>
-              <TableCell>Progress</TableCell>
-              {/*<TableCell align="right">Status</TableCell>*/}
-              <TableCell align="center">Features</TableCell>
-              <TableCell align="center">Issues</TableCell>
-              <TableCell align="center">Release date</TableCell>
-              <TableCell align="right" />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {releasesState.context.releases.length &&
-              releasesState.context.releases.map((row: any) => (
-                <Row key={row.release_uuid} row={row} />
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          {releasesSummary ? (
+            <div className="container-fluid my-2">
+              <div className="row">
+                <div className="col chart-container">
+                  <DoughnutChart
+                    id="releases"
+                    labels={pieChartLabels}
+                    label="Releases summary"
+                    data={releasesSummary?.releases}
+                  />
+                </div>
+                <div className="col chart-container">
+                  <BarChart
+                    id="features"
+                    label="Features summary"
+                    labels={featuresReleaseNames}
+                    data={releasesSummary?.features}
+                    backgroundColor={backgroundColor}
+                    borderWidth={borderWidth}
+                    borderColor={borderColor}
+                  />
+                </div>
+                <div className="col chart-container">
+                  <BarChart
+                    id="issues"
+                    label="Issues summary"
+                    labels={issuesReleaseNames}
+                    data={releasesSummary?.issues}
+                    backgroundColor={backgroundColor}
+                    borderWidth={borderWidth}
+                    borderColor={borderColor}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : null}
 
-      {/*Add/Edit release modal*/}
-      {showReleaseModal && (
-        <div
-          className="modal show"
-          style={{ display: "block", position: "initial" }}
-        >
+          <div className="d-flex justify-content-between">
+            <Typography variant="h6">Releases </Typography>
+          </div>
+          <TableContainer component={Paper} className="mt-4">
+            <Table aria-label="collapsible table">
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell>Name</TableCell>
+                  <TableCell>Progress</TableCell>
+                  {/*<TableCell align="right">Status</TableCell>*/}
+                  <TableCell align="center">Features</TableCell>
+                  <TableCell align="center">Issues</TableCell>
+                  <TableCell align="center">Release date</TableCell>
+                  <TableCell align="right" />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {releasesState.context.releases.length
+                  ? releasesState.context.releases.map((row: any) => (
+                      <Row key={row.release_uuid} row={row} />
+                    ))
+                  : []}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/*Add/Edit release modal*/}
           <Modal
             show={showReleaseModal}
             onHide={handleClose}
@@ -527,7 +525,28 @@ function ReleaseList() {
               </Button>
             </Modal.Footer>
           </Modal>
-        </div>
+
+          {/*{showReleaseModal ? (*/}
+          {/*  <div*/}
+          {/*    className="modal show"*/}
+          {/*    style={{ display: "block", position: "initial" }}*/}
+          {/*  ></div>*/}
+          {/*) : null}*/}
+        </>
+      ) : (
+        <>
+          {" "}
+          <div className="d-flex flex-column align-items-center justify-content-center h-50">
+            <Typography variant="h6" className="text-center pb-2">
+              No releases to display for the current product. <br />
+              To get you started, create a release!
+            </Typography>
+
+            <Button variant="outline-secondary" size="sm" onClick={handleShow}>
+              New release
+            </Button>
+          </div>
+        </>
       )}
     </>
   );
