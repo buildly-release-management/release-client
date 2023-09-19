@@ -6,14 +6,7 @@ import { Release } from "../../../interfaces/release";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import {
-  Card,
-  Dropdown,
-  OverlayTrigger,
-  ProgressBar,
-  Stack,
-  Tooltip,
-} from "react-bootstrap";
+import { Dropdown, ProgressBar } from "react-bootstrap";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
 import {
@@ -35,6 +28,8 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { HttpService } from "../../../services/http.service";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Tooltip from "@mui/material/Tooltip";
+import "./ReleaseList.css";
 
 const releaseService = new ReleaseService();
 const httpService = new HttpService();
@@ -280,22 +275,25 @@ function ReleaseList() {
             </IconButton>
           </TableCell>
           <TableCell component="th" scope="row">
-            {row.name}
+            <Link
+              to={{
+                pathname: `/releases/${row.release_uuid}`,
+              }}
+            >
+              {row.name}
+            </Link>{" "}
           </TableCell>
           <TableCell>
-            <OverlayTrigger
-              delay={{ hide: 450, show: 300 }}
-              overlay={() => (
-                <Tooltip>{`${progressBarObj.value}% achieved`}</Tooltip>
-              )}
-              placement="right"
+            <Tooltip
+              title={`${progressBarObj.value}% achieved`}
+              placement="right-start"
             >
               <ProgressBar
                 now={progressBarObj.value}
                 label={`${progressBarObj.value}%`}
                 variant={progressBarObj.theme}
               />
-            </OverlayTrigger>
+            </Tooltip>
           </TableCell>
           {/*<TableCell align="right">{row.status}</TableCell>*/}
           <TableCell align="center">{row.features_count}</TableCell>
@@ -391,10 +389,20 @@ function ReleaseList() {
             </Button>
           </div>
 
+          {/*style={{ position: "relative", height: "33%" }}*/}
+
           {releasesSummary ? (
-            <div className="container-fluid my-2">
-              <div className="row">
-                <div className="col chart-container">
+            <div className="container-fluid charts-parent-container">
+              <div
+                className="row flex-nowrap justify-content-between"
+                style={{ height: "100%" }}
+              >
+                <div
+                  className="chart-container"
+                  style={{
+                    width: "32%",
+                  }}
+                >
                   <DoughnutChart
                     id="releases"
                     labels={pieChartLabels}
@@ -402,7 +410,12 @@ function ReleaseList() {
                     data={releasesSummary?.releases}
                   />
                 </div>
-                <div className="col chart-container">
+                <div
+                  className="chart-container"
+                  style={{
+                    width: "32%",
+                  }}
+                >
                   <BarChart
                     id="features"
                     label="Features summary"
@@ -413,7 +426,12 @@ function ReleaseList() {
                     borderColor={borderColor}
                   />
                 </div>
-                <div className="col chart-container">
+                <div
+                  className="chart-container"
+                  style={{
+                    width: "32%",
+                  }}
+                >
                   <BarChart
                     id="issues"
                     label="Issues summary"
@@ -431,12 +449,25 @@ function ReleaseList() {
           <div className="d-flex justify-content-between">
             <Typography variant="h6">Releases </Typography>
           </div>
-          <TableContainer component={Paper} className="mt-4">
+
+          <TableContainer component={Paper} className="mt-2">
             <Table aria-label="collapsible table">
-              <TableHead>
-                <TableRow>
-                  <TableCell />
-                  <TableCell>Name</TableCell>
+              <TableHead
+                sx={{
+                  "& .MuiTableCell-root": {
+                    backgroundColor: "#EDEDED",
+                  },
+                }}
+              >
+                <TableRow
+                  sx={{
+                    "& th": {
+                      fontWeight: "500",
+                    },
+                  }}
+                >
+                  <TableCell width="12" />
+                  <TableCell width="33%">Name</TableCell>
                   <TableCell>Progress</TableCell>
                   {/*<TableCell align="right">Status</TableCell>*/}
                   <TableCell align="center">Features</TableCell>
