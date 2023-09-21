@@ -28,7 +28,6 @@ export class ReleaseService {
      * @param release
      */
     public submitRelease(release: Release) {
-        console.log('release', release);
         if(!(release.name && release.product_uuid)) {
             throw new Error(
                 'name and product_uuid are required to create a release'
