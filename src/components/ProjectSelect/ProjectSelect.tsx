@@ -45,7 +45,7 @@ const ProjectSelect = ({ orgUuid }: any) => {
             label="Select a product"
             size="large"
             value={currentProduct?.product_uuid}
-            info="last updated: 2023 -01-13"
+            info="last updated: 2023-01-13"
             options={
               (productState.context.products.length &&
                 productState.context.products.map((product: any) => ({
