@@ -6,7 +6,14 @@ import { Release } from "../../../interfaces/release";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import { Card, ProgressBar, Stack } from "react-bootstrap";
+import {
+  Card,
+  Dropdown,
+  OverlayTrigger,
+  ProgressBar,
+  Stack,
+  Tooltip,
+} from "react-bootstrap";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
 import {
@@ -28,6 +35,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { HttpService } from "../../../services/http.service";
 import {interpret} from 'xstate';
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const releaseService = new ReleaseService();
 const httpService = new HttpService();
@@ -63,18 +71,8 @@ function ReleaseList() {
     },
   });
 
-  // let barChartLabels = [
-  //   "Release 1",
-  //   "Release 2",
-  //   "Release 3",
-  //   "Release 4",
-  //   "Release 5",
-  //   "Release 6",
-  // ];
-
   let featuresReleaseNames: string[] = [];
   let issuesReleaseNames: string[] = [];
-
   useEffect(() => {
     // set current product
     if (productState.context.selectedProduct) {
@@ -187,6 +185,10 @@ function ReleaseList() {
     }
   };
 
+  const deleteRelease = (row: any) => {
+    send('Delete', {release_uuid: row.release_uuid})
+  };
+
   // Sample data
   const pieChartLabels = ["Completed", "Overdue", "In progress"];
   const backgroundColor = "#02b844";
@@ -195,17 +197,20 @@ function ReleaseList() {
 
   // Table
   function createData(
+    release_uuid: string,
     name: string,
-    // progress: number,
+    features_done: number,
     // progress_bar_variant: string,
     // status: number,
     features_count: number,
     issues_count: number,
     release_date: string
   ) {
+    const barValue = (features_done / features_count) * 100;
     return {
+      release_uuid,
       name,
-      // progress,
+      features_done,
       // progress_bar_variant,
       // status,
       features_count,
@@ -226,68 +231,143 @@ function ReleaseList() {
     };
   }
 
+  /**
+   * Init progress bar
+   * @param row
+   */
+  const initProgressBar = (row: any) => {
+    const value = (row.features_done / row.features_count) * 100;
+    const theme = value > 74 ? "info" : value > 40 ? "warning" : "danger";
+    return { value, theme };
+  };
+
   function Row(props: { row: ReturnType<typeof createData> }) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
 
+    let progressBarObj = {
+      value: 0,
+      theme: "danger",
+    };
+
+    if (row.features_count > 0) {
+      progressBarObj = initProgressBar(row);
+    }
+
+    let featuresList: any[] = [];
+    if (open && row) {
+      try {
+        console.log("row : ", row);
+
+        httpService
+          .fetchData(
+            `/feature/?release_features__release_uuid=${row.release_uuid}`,
+            "release"
+          )
+          .then((response: any) => {
+            featuresList = response.data;
+            console.log("response : ", response);
+          });
+      } catch (httpError) {
+        console.log("httpError : ", httpError);
+      }
+    }
+
     return (
       <React.Fragment>
         <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-          {/*<TableCell>*/}
-          {/*  <IconButton*/}
-          {/*    aria-label="expand row"*/}
-          {/*    size="small"*/}
-          {/*    onClick={() => setOpen(!open)}*/}
-          {/*  >*/}
-          {/*    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}*/}
-          {/*  </IconButton>*/}
-          {/*</TableCell>*/}
+          <TableCell>
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
           <TableCell component="th" scope="row">
             {row.name}
           </TableCell>
-          {/*<TableCell>*/}
-          {/*  <ProgressBar*/}
-          {/*    now={row.progress}*/}
-          {/*    label={`${row.progress}%`}*/}
-          {/*    variant={row.progress_bar_variant}*/}
-          {/*  />*/}
-          {/*</TableCell>*/}
+          <TableCell>
+            <OverlayTrigger
+              delay={{ hide: 450, show: 300 }}
+              overlay={() => (
+                <Tooltip>{`${progressBarObj.value}% achieved`}</Tooltip>
+              )}
+              placement="right"
+            >
+              <ProgressBar
+                now={progressBarObj.value}
+                label={`${progressBarObj.value}%`}
+                variant={progressBarObj.theme}
+              />
+            </OverlayTrigger>
+          </TableCell>
           {/*<TableCell align="right">{row.status}</TableCell>*/}
           <TableCell align="center">{row.features_count}</TableCell>
           <TableCell align="center">{row.issues_count}</TableCell>
           <TableCell align="center">{row.release_date}</TableCell>
+          <TableCell align="right">
+            <Dropdown>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                <IconButton aria-label="expand row" size="small">
+                  <MoreVertIcon />
+                </IconButton>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => deleteRelease(row)}>
+                  Delete release
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Typography variant="h6" gutterBottom component="div">
-                  History
+                  Features
                 </Typography>
                 <Table size="small" aria-label="purchases">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Customer</TableCell>
-                      <TableCell align="right">Amount</TableCell>
-                      <TableCell align="right">Total price ($)</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Progress</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Issues</TableCell>
+                      <TableCell align="right">Assignees</TableCell>
+                      <TableCell align="right">Date Due</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/*{row.history.map((historyRow) => (*/}
-                    {/*  <TableRow key={historyRow.date}>*/}
-                    {/*    <TableCell component="th" scope="row">*/}
-                    {/*      {historyRow.date}*/}
-                    {/*    </TableCell>*/}
-                    {/*    <TableCell>{historyRow.customerId}</TableCell>*/}
-                    {/*    <TableCell align="right">{historyRow.amount}</TableCell>*/}
-                    {/*    <TableCell align="right">*/}
-                    {/*      {Math.round(*/}
-                    {/*        historyRow.amount * row.features_count * 100*/}
-                    {/*      ) / 100}*/}
-                    {/*    </TableCell>*/}
-                    {/*  </TableRow>*/}
-                    {/*))}*/}
+                    {!featuresList.length && (
+                      <Typography>No features to display</Typography>
+                    )}
+
+                    {featuresList.length &&
+                      featuresList.map((feature) => (
+                        <TableRow key={feature.feature_uuid}>
+                          <TableCell component="th" scope="row">
+                            {feature.name}
+                          </TableCell>
+                          <TableCell>{feature.progress}</TableCell>
+                          <TableCell>{feature.status}</TableCell>
+                          <TableCell>{feature.issues}</TableCell>
+                          <TableCell align="right">
+                            {feature.assignees}
+                          </TableCell>
+                          <TableCell align="right">
+                            {feature.date_due}
+                          </TableCell>
+                          {/*<TableCell align="right">*/}
+                          {/*  {Math.round(*/}
+                          {/*      feature.amount * row.features_count * 100*/}
+                          {/*  ) / 100}*/}
+                          {/*</TableCell>*/}
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </Box>
@@ -357,100 +437,102 @@ function ReleaseList() {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              {/*<TableCell />*/}
+              <TableCell />
               <TableCell>Name</TableCell>
-              {/*<TableCell>Progress</TableCell>*/}
+              <TableCell>Progress</TableCell>
               {/*<TableCell align="right">Status</TableCell>*/}
               <TableCell align="center">Features</TableCell>
               <TableCell align="center">Issues</TableCell>
               <TableCell align="center">Release date</TableCell>
+              <TableCell align="right" />
             </TableRow>
           </TableHead>
           <TableBody>
             {releasesState.context.releases.length &&
               releasesState.context.releases.map((row: any) => (
-                <Row key={row.name} row={row} />
+                <Row key={row.release_uuid} row={row} />
               ))}
           </TableBody>
         </Table>
       </TableContainer>
 
       {/*Add/Edit release modal*/}
-      <div
-        className="modal show"
-        style={{ display: "block", position: "initial" }}
-      >
-        <Modal
-          show={showReleaseModal}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}
-          centered
-          size="lg"
+      {showReleaseModal && (
+        <div
+          className="modal show"
+          style={{ display: "block", position: "initial" }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>New release</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {" "}
-            <Form noValidate>
-              {/*name*/}
-              <Form.Group className="mb-3" controlId="name">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="text"
-                  placeholder="Name"
-                  name="name"
-                  required
-                  onChange={(event) => updateFormData(event)}
-                />
-              </Form.Group>
-              {/*description*/}
-              <Form.Group className="mb-3" controlId="description">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={2}
-                  name="description"
-                  onChange={(event) => updateFormData(event)}
-                />
-              </Form.Group>
-              {/*release date*/}
-              <Form.Group className="mb-3" controlId="date">
-                <Form.Label>Release date</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="date"
-                  placeholder="Release date"
-                  name="release_date"
-                  required
-                  onChange={(event) => updateFormData(event)}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="outline-secondary"
-              size="sm"
-              onClick={() => handleClose()}
-            >
-              Close
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              type="submit"
-              disabled={!(formData.name && formData.release_date)}
-              onClick={(event) => submitRelease(event)}
-            >
-              Save
-            </Button>
-            {/* todo - form validation formData.product_uuid*/}
-          </Modal.Footer>
-        </Modal>
-      </div>
+          <Modal
+            show={showReleaseModal}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+            centered
+            size="lg"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>New release</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {" "}
+              <Form noValidate>
+                {/*name*/}
+                <Form.Group className="mb-3" controlId="name">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="text"
+                    placeholder="Name"
+                    name="name"
+                    required
+                    onChange={(event) => updateFormData(event)}
+                  />
+                </Form.Group>
+                {/*description*/}
+                <Form.Group className="mb-3" controlId="description">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    name="description"
+                    onChange={(event) => updateFormData(event)}
+                  />
+                </Form.Group>
+                {/*release date*/}
+                <Form.Group className="mb-3" controlId="date">
+                  <Form.Label>Release date</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="date"
+                    placeholder="Release date"
+                    name="release_date"
+                    required
+                    onChange={(event) => updateFormData(event)}
+                  />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-secondary"
+                size="sm"
+                onClick={() => handleClose()}
+              >
+                Close
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                type="submit"
+                disabled={!(formData.name && formData.release_date)}
+                onClick={(event) => submitRelease(event)}
+              >
+                Save
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      )}
     </>
   );
 }

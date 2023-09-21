@@ -21,7 +21,7 @@ const deleteRelease = (context: any, event: any) => new Promise((resolve, reject
         httpService.deleteItem(
             `/release/${event.release_uuid}/`,
             'release'
-        ).then()
+        ).then((_) => ({release_uuid: event.release_uuid}))
     )
 })
 

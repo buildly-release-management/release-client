@@ -112,7 +112,7 @@ export const releaseMachine = createMachine(
                 const event_data: any = event.data
                 return {
                     releases: context.releases.filter(
-                        (release: any) => release.release_uuid === event_data.release_uuid
+                        (release: any) => release.release_uuid !== event_data.release_uuid
                     )
                 }
             })
