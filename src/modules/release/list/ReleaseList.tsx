@@ -69,6 +69,7 @@ function ReleaseList() {
   let featuresReleaseNames: string[] = [];
   let issuesReleaseNames: string[] = [];
   useEffect(() => {
+    console.log('Product State: ', productState.context)
     // set current product
     if (productState.context.selectedProduct) {
       setCurrentProduct(productState.context.selectedProduct);
@@ -108,9 +109,6 @@ function ReleaseList() {
       }
     }
   }, [productState]);
-
-  const service = interpret(productMachine).start();
-  const serviceSub = service.subscribe((state) => console.log(state));
 
   /**
    * Construct bar chart data
@@ -181,6 +179,7 @@ function ReleaseList() {
   };
 
   const deleteRelease = (row: any) => {
+    console.log('Row:: ', row)
     send('Delete', {release_uuid: row.release_uuid})
   };
 
@@ -452,6 +451,9 @@ function ReleaseList() {
           <div className="d-flex justify-content-between">
             <Typography variant="h6">Releases </Typography>
           </div>
+          <p>
+            {productState.context?.selectedProduct?.name}
+          </p>
 
           <TableContainer component={Paper} className="mt-2">
             <Table aria-label="collapsible table">

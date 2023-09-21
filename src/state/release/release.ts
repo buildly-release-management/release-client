@@ -79,7 +79,9 @@ export const releaseMachine = createMachine(
                 states: {
                     Creating: {
                         invoke: {
-                            src: submitRelease
+                            src: submitRelease,
+                            onDone: {actions: 'addSingleReleaseToCxt', target: '#releases.Submitted'},
+                            onError: {actions: 'addErrorToCxt', target: '#releases.SubmitFailed'}
                         },
                     },
                     Updating: {
@@ -106,7 +108,7 @@ export const releaseMachine = createMachine(
             }),
             addSingleReleaseToCxt: assign((context, event) => {
                 const releases = [...context.releases, event.data]
-                return {...{releases}}
+                return {releases: releases}
             }),
             removeItemFromCxt: assign((context, event) => {
                 const event_data: any = event.data
