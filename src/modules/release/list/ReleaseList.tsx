@@ -255,7 +255,6 @@ function ReleaseList() {
           )
           .then((response: any) => {
             featuresList = response.data;
-            console.log("response : ", response);
           });
       } catch (httpError) {
         console.log("httpError : ", httpError);
@@ -546,7 +545,7 @@ function ReleaseList() {
                 Close
               </Button>
               <Button
-                variant="primary"
+                variant="secondary"
                 size="sm"
                 type="submit"
                 disabled={!(formData.name && formData.release_date)}
@@ -556,13 +555,6 @@ function ReleaseList() {
               </Button>
             </Modal.Footer>
           </Modal>
-
-          {/*{showReleaseModal ? (*/}
-          {/*  <div*/}
-          {/*    className="modal show"*/}
-          {/*    style={{ display: "block", position: "initial" }}*/}
-          {/*  ></div>*/}
-          {/*) : null}*/}
         </>
       ) : (
         <>
