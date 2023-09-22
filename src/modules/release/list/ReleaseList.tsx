@@ -69,7 +69,6 @@ function ReleaseList() {
   let featuresReleaseNames: string[] = [];
   let issuesReleaseNames: string[] = [];
   useEffect(() => {
-    console.log("Product State: ", productState.context);
     // set current product
     if (productState.context.selectedProduct) {
       setCurrentProduct(productState.context.selectedProduct);
