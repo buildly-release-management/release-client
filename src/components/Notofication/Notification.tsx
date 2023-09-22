@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const Notification = ({ variant, message }: any) => {
   return (
     <Alert key={variant} variant={variant}>
-      message
+      <>{message}</>
     </Alert>
   );
 };

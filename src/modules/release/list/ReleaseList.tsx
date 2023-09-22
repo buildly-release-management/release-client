@@ -27,7 +27,7 @@ import { productMachine } from "../../../state/product/product";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { HttpService } from "../../../services/http.service";
-import {interpret} from 'xstate';
+import { interpret } from "xstate";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Tooltip from "@mui/material/Tooltip";
 import "./ReleaseList.css";
@@ -60,7 +60,7 @@ function ReleaseList() {
   });
 
   // @ts-ignore
-  const [releasesState, send] = useMachine(releaseMachine, {
+  const [releasesState, send, service] = useMachine(releaseMachine, {
     context: {
       releases: [],
     },
@@ -69,7 +69,7 @@ function ReleaseList() {
   let featuresReleaseNames: string[] = [];
   let issuesReleaseNames: string[] = [];
   useEffect(() => {
-    console.log('Product State: ', productState.context)
+    console.log("Product State: ", productState.context);
     // set current product
     if (productState.context.selectedProduct) {
       setCurrentProduct(productState.context.selectedProduct);
@@ -179,8 +179,8 @@ function ReleaseList() {
   };
 
   const deleteRelease = (row: any) => {
-    console.log('Row:: ', row)
-    send('Delete', {release_uuid: row.release_uuid})
+    console.log("Row:: ", row);
+    send("Delete", { release_uuid: row.release_uuid });
   };
 
   // Sample data
@@ -451,9 +451,7 @@ function ReleaseList() {
           <div className="d-flex justify-content-between">
             <Typography variant="h6">Releases </Typography>
           </div>
-          <p>
-            {productState.context?.selectedProduct?.name}
-          </p>
+          <p>{productState.context?.selectedProduct?.name}</p>
 
           <TableContainer component={Paper} className="mt-2">
             <Table aria-label="collapsible table">

@@ -26,6 +26,7 @@ const ProjectSelect = ({ orgUuid }: any) => {
 
   // set current product
   const [currentProduct, setCurrentProduct] = useState(null as any);
+  console.log("currentProduct : ", currentProduct);
   useEffect(() => {
     // set current product
     if (productState.context.selectedProduct) {
@@ -45,7 +46,15 @@ const ProjectSelect = ({ orgUuid }: any) => {
             label="Select a product"
             size="large"
             value={currentProduct?.product_uuid}
-            info="last updated: 2023-01-13"
+            info={
+              currentProduct?.edit_date
+                ? `last updated: ${
+                    new Date(currentProduct?.edit_date)
+                      .toISOString()
+                      .split("T")[0]
+                  }`
+                : ""
+            }
             options={
               (productState.context.products.length &&
                 productState.context.products.map((product: any) => ({
