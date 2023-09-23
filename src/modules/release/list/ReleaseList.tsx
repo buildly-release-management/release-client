@@ -27,7 +27,7 @@ import { productMachine } from "../../../state/product/product";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { HttpService } from "../../../services/http.service";
-import {interpret} from 'xstate';
+import { interpret } from "xstate";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Tooltip from "@mui/material/Tooltip";
 import "./ReleaseList.css";
