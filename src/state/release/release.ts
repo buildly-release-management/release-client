@@ -13,7 +13,6 @@ export const releaseMachine = createMachine(
         },
 
         id: 'releases',
-
         states: {
             Entry: {
                 states: {
@@ -50,13 +49,14 @@ export const releaseMachine = createMachine(
                                 target: "#releases.Submitting.Updating",
                                 cond: (context, event) => Boolean(event.release_uuid)
                             }, "#releases.Submitting.Creating"],
-                            Delete: "#releases.Deleting"
+                            Delete: "#releases.Deleting",
+                            LoadReleases: {target: "Loading"}
                         }
                     },
 
                     Idle: {
                         on: {
-                            Load: "Loading"
+                            LoadReleases: {target: "Loading"}
                         }
                     }
                 },
