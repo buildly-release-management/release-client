@@ -165,12 +165,12 @@ function ReleaseList() {
     event.preventDefault();
     if (currentProduct) {
       const data = { product_uuid: currentProduct.product_uuid, ...formData };
-      sendRelease("Submit", { release: data });
+      sendRelease({type: 'Submit', release: data });
     }
   };
 
   const deleteRelease = (row: any) => {
-    sendRelease('Delete', {release_uuid: row.release_uuid})
+    sendRelease( {type: 'Delete', release_uuid: row.release_uuid})
   };
 
   // Sample data
