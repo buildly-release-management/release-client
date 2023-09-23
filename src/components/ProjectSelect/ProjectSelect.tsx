@@ -15,7 +15,7 @@ const ProjectSelect = ({orgUuid}: any) => {
     const globalContext = useContext(GlobalStateContext);
     const [productState, send] = useActor(globalContext.productMachineService);
     const selectCurrentProduct = (state: any) => state.context.selectedProduct;
-    
+
     // set current product
     const currentProduct = useSelector(globalContext.productMachineService, selectCurrentProduct)
     const setSelectedProduct = (value: any) => {
