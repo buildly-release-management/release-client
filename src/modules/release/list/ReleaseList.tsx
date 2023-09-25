@@ -32,6 +32,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Tooltip from "@mui/material/Tooltip";
 import "./ReleaseList.css";
 import { GlobalStateContext } from "../../../contexts/globalState";
+import LoadingSpinner from "../../../components/Spinner";
 
 const httpService = new HttpService();
 
@@ -48,6 +49,7 @@ function ReleaseList() {
 
   // define release summary
   const [releasesSummary, setReleasesSummary] = useState(null as any);
+  const [summaryLoading, setSummaryLoading] = useState(false);
 
   const globalContext = useContext(GlobalStateContext);
   const [productState] = useActor(globalContext.productMachineService);
@@ -379,196 +381,215 @@ function ReleaseList() {
 
   return (
     <>
-      {releases.length ? (
+      {summaryLoading ? (
         <>
-          <div className="d-flex justify-content-between">
-            <Typography variant="h6">Releases summary</Typography>
-
-            <Button variant="outline-secondary" size="sm" onClick={handleShow}>
-              New release
-            </Button>
+          <div className="d-flex flex-column align-items-center justify-content-center h-50">
+            <LoadingSpinner />
           </div>
-
-          {/*style={{ position: "relative", height: "33%" }}*/}
-
-          {releasesSummary ? (
-            <div className="container-fluid charts-parent-container">
-              <div
-                className="row flex-nowrap justify-content-between"
-                style={{ height: "100%" }}
-              >
-                <div
-                  className="chart-container"
-                  style={{
-                    width: "32%",
-                  }}
-                >
-                  <DoughnutChart
-                    id="releases"
-                    labels={pieChartLabels}
-                    label="Releases summary"
-                    data={releasesSummary?.releases}
-                  />
-                </div>
-                <div
-                  className="chart-container"
-                  style={{
-                    width: "32%",
-                  }}
-                >
-                  <BarChart
-                    id="features"
-                    label="Features summary"
-                    labels={featuresReleaseNames}
-                    data={releasesSummary?.features}
-                    backgroundColor={backgroundColor}
-                    borderWidth={borderWidth}
-                    borderColor={borderColor}
-                  />
-                </div>
-                <div
-                  className="chart-container"
-                  style={{
-                    width: "32%",
-                  }}
-                >
-                  <BarChart
-                    id="issues"
-                    label="Issues summary"
-                    labels={issuesReleaseNames}
-                    data={releasesSummary?.issues}
-                    backgroundColor={backgroundColor}
-                    borderWidth={borderWidth}
-                    borderColor={borderColor}
-                  />
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          <div className="d-flex justify-content-between">
-            <Typography variant="h6">Releases </Typography>
-          </div>
-          <TableContainer component={Paper} className="mt-2">
-            <Table aria-label="collapsible table">
-              <TableHead
-                sx={{
-                  "& .MuiTableCell-root": {
-                    backgroundColor: "#EDEDED",
-                  },
-                }}
-              >
-                <TableRow
-                  sx={{
-                    "& th": {
-                      fontWeight: "500",
-                    },
-                  }}
-                >
-                  <TableCell width="12" />
-                  <TableCell width="33%">Name</TableCell>
-                  <TableCell>Progress</TableCell>
-                  {/*<TableCell align="right">Status</TableCell>*/}
-                  <TableCell align="center">Features</TableCell>
-                  <TableCell align="center">Issues</TableCell>
-                  <TableCell align="center">Release date</TableCell>
-                  <TableCell align="right" />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {releases.length
-                  ? releases.map((row: any) => (
-                      <Row key={row.release_uuid} row={row} />
-                    ))
-                  : []}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          {/*Add/Edit release modal*/}
-          <Modal
-            show={showReleaseModal}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-            centered
-            size="lg"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>New release</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              {" "}
-              <Form noValidate>
-                {/*name*/}
-                <Form.Group className="mb-3" controlId="name">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    size="sm"
-                    type="text"
-                    placeholder="Name"
-                    name="name"
-                    required
-                    onChange={(event) => updateFormData(event)}
-                  />
-                </Form.Group>
-                {/*description*/}
-                <Form.Group className="mb-3" controlId="description">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={2}
-                    name="description"
-                    onChange={(event) => updateFormData(event)}
-                  />
-                </Form.Group>
-                {/*release date*/}
-                <Form.Group className="mb-3" controlId="date">
-                  <Form.Label>Release date</Form.Label>
-                  <Form.Control
-                    size="sm"
-                    type="date"
-                    placeholder="Release date"
-                    name="release_date"
-                    required
-                    onChange={(event) => updateFormData(event)}
-                  />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => handleClose()}
-              >
-                Close
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                type="submit"
-                disabled={!(formData.name && formData.release_date)}
-                onClick={(event) => submitRelease(event)}
-              >
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal>
         </>
       ) : (
         <>
           {" "}
-          <div className="d-flex flex-column align-items-center justify-content-center h-50">
-            <Typography variant="h6" className="text-center pb-2">
-              No releases to display for the current product. <br />
-              To get you started, create a release!
-            </Typography>
+          {releases.length ? (
+            <>
+              <div className="d-flex justify-content-between">
+                <Typography variant="h6">Releases summary</Typography>
 
-            <Button variant="outline-secondary" size="sm" onClick={handleShow}>
-              New release
-            </Button>
-          </div>
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={handleShow}
+                >
+                  New release
+                </Button>
+              </div>
+
+              {/*style={{ position: "relative", height: "33%" }}*/}
+
+              {releasesSummary ? (
+                <div className="container-fluid charts-parent-container">
+                  <div
+                    className="row flex-nowrap justify-content-between"
+                    style={{ height: "100%" }}
+                  >
+                    <div
+                      className="chart-container"
+                      style={{
+                        width: "32%",
+                      }}
+                    >
+                      <DoughnutChart
+                        id="releases"
+                        labels={pieChartLabels}
+                        label="Releases summary"
+                        data={releasesSummary?.releases}
+                      />
+                    </div>
+                    <div
+                      className="chart-container"
+                      style={{
+                        width: "32%",
+                      }}
+                    >
+                      <BarChart
+                        id="features"
+                        label="Features summary"
+                        labels={featuresReleaseNames}
+                        data={releasesSummary?.features}
+                        backgroundColor={backgroundColor}
+                        borderWidth={borderWidth}
+                        borderColor={borderColor}
+                      />
+                    </div>
+                    <div
+                      className="chart-container"
+                      style={{
+                        width: "32%",
+                      }}
+                    >
+                      <BarChart
+                        id="issues"
+                        label="Issues summary"
+                        labels={issuesReleaseNames}
+                        data={releasesSummary?.issues}
+                        backgroundColor={backgroundColor}
+                        borderWidth={borderWidth}
+                        borderColor={borderColor}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="d-flex justify-content-between">
+                <Typography variant="h6">Releases </Typography>
+              </div>
+              <TableContainer component={Paper} className="mt-2">
+                <Table aria-label="collapsible table">
+                  <TableHead
+                    sx={{
+                      "& .MuiTableCell-root": {
+                        backgroundColor: "#EDEDED",
+                      },
+                    }}
+                  >
+                    <TableRow
+                      sx={{
+                        "& th": {
+                          fontWeight: "500",
+                        },
+                      }}
+                    >
+                      <TableCell width="12" />
+                      <TableCell width="33%">Name</TableCell>
+                      <TableCell>Progress</TableCell>
+                      {/*<TableCell align="right">Status</TableCell>*/}
+                      <TableCell align="center">Features</TableCell>
+                      <TableCell align="center">Issues</TableCell>
+                      <TableCell align="center">Release date</TableCell>
+                      <TableCell align="right" />
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {releases.length
+                      ? releases.map((row: any) => (
+                          <Row key={row.release_uuid} row={row} />
+                        ))
+                      : []}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              {/*Add/Edit release modal*/}
+              <Modal
+                show={showReleaseModal}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+                centered
+                size="lg"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title>New release</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  {" "}
+                  <Form noValidate>
+                    {/*name*/}
+                    <Form.Group className="mb-3" controlId="name">
+                      <Form.Label>Name</Form.Label>
+                      <Form.Control
+                        size="sm"
+                        type="text"
+                        placeholder="Name"
+                        name="name"
+                        required
+                        onChange={(event) => updateFormData(event)}
+                      />
+                    </Form.Group>
+                    {/*description*/}
+                    <Form.Group className="mb-3" controlId="description">
+                      <Form.Label>Description</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={2}
+                        name="description"
+                        onChange={(event) => updateFormData(event)}
+                      />
+                    </Form.Group>
+                    {/*release date*/}
+                    <Form.Group className="mb-3" controlId="date">
+                      <Form.Label>Release date</Form.Label>
+                      <Form.Control
+                        size="sm"
+                        type="date"
+                        placeholder="Release date"
+                        name="release_date"
+                        required
+                        onChange={(event) => updateFormData(event)}
+                      />
+                    </Form.Group>
+                  </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => handleClose()}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    type="submit"
+                    disabled={!(formData.name && formData.release_date)}
+                    onClick={(event) => submitRelease(event)}
+                  >
+                    Save
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          ) : (
+            <>
+              {" "}
+              <div className="d-flex flex-column align-items-center justify-content-center h-50">
+                <Typography variant="h6" className="text-center pb-2">
+                  No releases to display for the current product. <br />
+                  To get you started, create a release!
+                </Typography>
+
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={handleShow}
+                >
+                  New release
+                </Button>
+              </div>
+            </>
+          )}
         </>
       )}
     </>
