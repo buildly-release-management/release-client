@@ -1,9 +1,9 @@
-import {useActor, useMachine, useSelector} from "@xstate/react";
+import { useActor, useMachine, useSelector } from "@xstate/react";
 import { releaseMachine } from "../../../state/release/release";
 import { ReleaseService } from "../../../services/release.service";
 import Table from "react-bootstrap/Table";
 import { Release } from "../../../interfaces/release";
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { Dropdown, ProgressBar } from "react-bootstrap";
@@ -31,7 +31,7 @@ import { interpret } from "xstate";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Tooltip from "@mui/material/Tooltip";
 import "./ReleaseList.css";
-import {GlobalStateContext} from '../../../contexts/globalState';
+import { GlobalStateContext } from "../../../contexts/globalState";
 
 const httpService = new HttpService();
 
@@ -51,12 +51,20 @@ function ReleaseList() {
 
   const globalContext = useContext(GlobalStateContext);
   const [productState] = useActor(globalContext.productMachineService);
-  const [releaseState, sendRelease] = useActor(globalContext.releaseMachineService)
+  const [releaseState, sendRelease] = useActor(
+    globalContext.releaseMachineService
+  );
   const selectCurrentProduct = (state: any) => state.context.selectedProduct;
   const selectReleases = (state: any) => state.context.releases;
 
-  const currentProduct = useSelector(globalContext.productMachineService, selectCurrentProduct)
-  const releases = useSelector(globalContext.releaseMachineService, selectReleases);
+  const currentProduct = useSelector(
+    globalContext.productMachineService,
+    selectCurrentProduct
+  );
+  const releases = useSelector(
+    globalContext.releaseMachineService,
+    selectReleases
+  );
 
   let featuresReleaseNames: string[] = [];
   let issuesReleaseNames: string[] = [];
@@ -64,7 +72,7 @@ function ReleaseList() {
     // set current product
     if (currentProduct) {
       sendRelease({
-        type: 'LoadReleases',
+        type: "LoadReleases",
         product_uuid: currentProduct.product_uuid,
       });
 
@@ -165,12 +173,12 @@ function ReleaseList() {
     event.preventDefault();
     if (currentProduct) {
       const data = { product_uuid: currentProduct.product_uuid, ...formData };
-      sendRelease({type: 'Submit', release: data });
+      sendRelease({ type: "Submit", release: data });
     }
   };
 
   const deleteRelease = (row: any) => {
-    sendRelease( {type: 'Delete', release_uuid: row.release_uuid})
+    sendRelease({ type: "Delete", release_uuid: row.release_uuid });
   };
 
   // Sample data
