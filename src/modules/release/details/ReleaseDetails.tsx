@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import DoughnutChart from "../../../components/Charts/Doughnut";
 import BarChart from "../../../components/Charts/BarChart";
 import "./ReleaseDetails.css";
@@ -27,6 +27,7 @@ const httpService = new HttpService();
 
 function ReleaseDetails() {
   const { releaseUuid } = useParams();
+  const navigate = useNavigate();
 
   // Tabs
   const [tabKey, setTabKey] = React.useState<string>("report");
@@ -92,6 +93,10 @@ function ReleaseDetails() {
       ],
     };
   }
+
+  const navigateToReleasesList = () => {
+    navigate("/app/release", { replace: true });
+  };
 
   // Initialize release details
   const [releasesDetails, setReleaseDetails] = useState(null as any);
@@ -218,7 +223,7 @@ function ReleaseDetails() {
     <>
       <section className="toolbar ">
         {" "}
-        <Button variant="dark" size="sm">
+        <Button variant="dark" size="sm" onClick={navigateToReleasesList}>
           <KeyboardArrowLeftIcon />
         </Button>
         <Link
@@ -242,17 +247,49 @@ function ReleaseDetails() {
       >
         {/*Release summary tab*/}
         <Tab eventKey="report" title="Report">
-          <div className="container-fluid my-2">
-            <div className="row">
-              <div className="col chart-container">
-                <DoughnutChart
-                  id="releases"
-                  labels={pieChartLabels}
-                  label={pieChartLabel}
-                  data={pieChartData}
-                />
+          <div className="container-fluid release-summary-container">
+            <div className="row flex-nowrap justify-content-between">
+              <div
+                className="chart-container"
+                style={{
+                  width: "32%",
+                  height: "100%",
+                }}
+              >
+                <Typography variant="h6" className="release-summary-entry">
+                  Summary
+                </Typography>
+                <hr />
+                <section className="summary-container">
+                  <section className="release-summary-entry">
+                    <label>Start date</label>{" "}
+                    <label>
+                      {releasesDetails && releasesDetails.start_date}
+                    </label>
+                  </section>
+                  <hr />
+                  <section className="release-summary-entry">
+                    <label>Release date</label>{" "}
+                    <label>
+                      {releasesDetails && releasesDetails.release_date}
+                    </label>
+                  </section>
+                  <hr />
+                  <section className="release-summary-entry">
+                    <label>Status</label> <label>Status</label>
+                  </section>
+                  <hr />
+                  <section className="release-summary-entry">
+                    <label>Progress</label> <label>progress bar</label>
+                  </section>
+                </section>
               </div>
-              <div className="col chart-container">
+              <div
+                className="chart-container"
+                style={{
+                  width: "32%",
+                }}
+              >
                 <BarChart
                   id="features"
                   label="Features summary"
@@ -263,7 +300,12 @@ function ReleaseDetails() {
                   borderColor={borderColor}
                 />
               </div>
-              <div className="col chart-container">
+              <div
+                className="chart-container"
+                style={{
+                  width: "32%",
+                }}
+              >
                 <BarChart
                   id="issues"
                   label="Bugs summary"
@@ -276,23 +318,46 @@ function ReleaseDetails() {
               </div>
             </div>
           </div>
-          <div className="container-fluid my-2">
-            <div className="row">
-              <div className="col chart-container">
-                <DoughnutChart
-                  id="releases"
-                  labels={pieChartLabels}
-                  label={pieChartLabel}
-                  data={pieChartData}
-                />
+
+          <div className="container-fluid summary-parent-container">
+            <div className="row flex-nowrap justify-content-between">
+              <div
+                className="chart-container"
+                style={{
+                  width: "49%",
+                }}
+              >
+                <div
+                  style={{
+                    width: "50%",
+                  }}
+                >
+                  <DoughnutChart
+                    id="releases"
+                    labels={pieChartLabels}
+                    label={pieChartLabel}
+                    data={pieChartData}
+                  />
+                </div>
               </div>
-              <div className="col chart-container">
-                <DoughnutChart
-                  id="releases"
-                  labels={pieChartLabels}
-                  label={pieChartLabel}
-                  data={pieChartData}
-                />
+              <div
+                className="chart-container"
+                style={{
+                  width: "49%",
+                }}
+              >
+                <div
+                  style={{
+                    width: "50%",
+                  }}
+                >
+                  <DoughnutChart
+                    id="releases"
+                    labels={pieChartLabels}
+                    label={pieChartLabel}
+                    data={pieChartData}
+                  />
+                </div>
               </div>
             </div>
           </div>
