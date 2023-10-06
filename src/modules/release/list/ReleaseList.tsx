@@ -276,7 +276,7 @@ function ReleaseList() {
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
           </TableCell>
-          <TableCell component="th" scope="row">
+          <TableCell>
             <Link
               to={{
                 pathname: `/releases/${row.release_uuid}`,
