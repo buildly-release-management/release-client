@@ -68,6 +68,7 @@ function ReleaseDetails() {
     name: string,
     progress: number,
     progress_bar_variant: string,
+    complexity: number,
     status: number,
     features: number,
     issues: number,
@@ -78,22 +79,11 @@ function ReleaseDetails() {
       name,
       progress,
       progress_bar_variant,
+      complexity,
       status,
       features,
       issues,
       release_date,
-      history: [
-        {
-          date: "2020-01-05",
-          customerId: "11091700",
-          amount: 3,
-        },
-        {
-          date: "2020-01-02",
-          customerId: "Anonymous",
-          amount: 1,
-        },
-      ],
     };
   }
 
@@ -264,7 +254,8 @@ function ReleaseDetails() {
           {/*    variant={row.progress_bar_variant}*/}
           {/*  />*/}
           {/*</TableCell>*/}
-          <TableCell align="right">{row.status}</TableCell>
+          <TableCell align="center">{row.complexity}</TableCell>
+          {/*<TableCell align="right">{row.status}</TableCell>*/}
           {/*<TableCell align="center">{row.features}</TableCell>*/}
           {/*<TableCell align="center">{row.issues}</TableCell>*/}
           {/*<TableCell align="right">{row.release_date}</TableCell>*/}
@@ -280,7 +271,8 @@ function ReleaseDetails() {
                   <TableHead>
                     <TableRow>
                       <TableCell>Name</TableCell>
-                      <TableCell>Status</TableCell>
+                      <TableCell>Complexity</TableCell>
+                      {/*<TableCell>Status</TableCell>*/}
                       {/*<TableCell align="right">Amount</TableCell>*/}
                       {/*<TableCell align="right">Total price ($)</TableCell>*/}
                     </TableRow>
@@ -291,7 +283,8 @@ function ReleaseDetails() {
                         <TableCell component="th" scope="row">
                           {issue.name}
                         </TableCell>
-                        <TableCell>{issue.status}</TableCell>
+                        <TableCell>{issue.complexity}</TableCell>
+                        {/*<TableCell>{issue.status}</TableCell>*/}
                         {/*<TableCell align="right">{issue.amount}</TableCell>*/}
                         {/*<TableCell align="right">*/}
                         {/*  {Math.round(issue.amount * row.status * 100) / 100}*/}
@@ -495,7 +488,8 @@ function ReleaseDetails() {
                   <TableCell width="12" />
                   <TableCell width="33%">Name</TableCell>
                   {/*<TableCell>Progress</TableCell>*/}
-                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center">Complexity</TableCell>
+                  {/*<TableCell align="center">Status</TableCell>*/}
                   {/*<TableCell align="center">Features</TableCell>*/}
                   {/*<TableCell align="center">Issues</TableCell>*/}
                   {/*<TableCell align="right">Release date</TableCell>*/}
